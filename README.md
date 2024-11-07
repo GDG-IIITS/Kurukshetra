@@ -1,2 +1,1 @@
-# Chakra-view-
-This is the frontend for chakravyu
+add a readme here todo
