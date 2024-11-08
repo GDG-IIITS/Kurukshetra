@@ -8,6 +8,7 @@ import { createWhoami } from "./commands/whoami";
 import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
 import { ACHIEVEMENTS } from "./commands/achievements";
+import { CHALLENGE } from './KurukshetraCommands/challenge';
 
 //mutWriteLines gets deleted and reassigned
 let mutWriteLines = document.getElementById("write-lines");
@@ -31,7 +32,7 @@ const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
-const COMMANDS = ["help", "about", "projects", "whoami", "banner", "clear", "hackme", "sudo", "s/github", "s/linkedin", "s/instagram", "s/discord", "s/gcloud", "s/gdeveloper", "s/unity", "s/email", "achievements", "p/insiiits"];
+const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about"];
 const HISTORY : string[] = [];
 const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
@@ -279,12 +280,12 @@ function commandHandler(input : string) {
       }
       writeLines(HELP);
       break;
-    case 'whoami':      
+    case 'challenge':      
       if(bareMode) {
         writeLines([`${command.username}`, "<br>"])
         break;
       }
-      writeLines(createWhoami());
+      writeLines(CHALLENGE);
       break;
     case 'about':
       if(bareMode) {
@@ -567,7 +568,7 @@ const initEventListeners = () => {
   } 
 
     window.addEventListener('load', () => {
-    writeLines(BANNER);
+    writeLines(BANNER);  
   });
   
   USERINPUT.addEventListener('keypress', userInputHandler);

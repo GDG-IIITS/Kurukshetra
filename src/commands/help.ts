@@ -3,39 +3,67 @@ import command from '../../config.json' assert {type: 'json'};
 const helpObj = {
   "commands": [
     [
-    "'about'",
-    "Who made this website?",
+    "'register'",
+    "if new",
     ],
     [
-      "'projects'",
-      "Maybe there's something interesting."
+      "'login'",
+      "if already registered"
     ],
     [
-      "'achievements'",
-      "Flex Flex."
-    ],
-    // 
-    //   "'workexp'",
-    //   "Display previous work-experinces/internships."
-    // ],
-    [
-      "'whoami'",
-      "A perplexing question."
-    ],
-    ["'banner'",
-      "Display the banner."
-    ],
-    [
-      "'clear'",
-      "Clear the terminal."
-    ],
-    [
+
       "",
       ""
     ],
     [
       "",
-      "---[Projects]--"
+      "---[Teams]--"
+    ],
+    [
+      "'team'",
+      "View your team"
+    ],
+    [
+      "'creat-team'",
+      "create a new team"
+    ],
+    [
+      "'join-team'",
+      "join an existing team"
+    ],
+    [
+
+      "",
+      ""
+    ],
+    [
+      "",
+      "---[Kurukshetra]--"
+    ],
+    [
+      "'challenge'",
+      "Show your mental muscle"
+    ],
+    [
+      "'submit'",
+      "Think you got the key?"
+    ],
+    [
+      "'leaderbord'",
+      "See your ranking"
+    ],
+    [
+      "'record'",
+      "See your completed challenges"
+    ],
+    [
+
+      "",
+      ""
+    ],
+    [
+      "'about'",
+      "take a look at the team"
     ]
   ],
 }
@@ -114,74 +142,74 @@ const createHelp = () : string[] => {
   //   string += ele[1];
   //   help.push(string);
 
-  command.projects.webdev.forEach((ele) =>{
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>'p/";
-    string += ele[0];
-    string += "'</span>";
-    string += SPACE.repeat(16 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
-  command.projects.flutterdev.forEach((ele) =>{
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>'p/";
-    string += ele[0];
-    string += "'</span>";
-    string += SPACE.repeat(16 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
-  command.projects.vrdev.forEach((ele) =>{
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>'p/";
-    string += ele[0];
-    string += "'</span>";
-    string += SPACE.repeat(16 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
-  command.projects.cybersec.forEach((ele) =>{
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>'p/";
-    string += ele[0];
-    string += "'</span>";
-    string += SPACE.repeat(16 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
-  command.projects.robotics.forEach((ele) =>{
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>'p/";
-    string += ele[0];
-    string += "'</span>";
-    string += SPACE.repeat(16 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
+  // command.projects.webdev.forEach((ele) =>{
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>'p/";
+  //   string += ele[0];
+  //   string += "'</span>";
+  //   string += SPACE.repeat(16 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
+  // command.projects.flutterdev.forEach((ele) =>{
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>'p/";
+  //   string += ele[0];
+  //   string += "'</span>";
+  //   string += SPACE.repeat(16 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
+  // command.projects.vrdev.forEach((ele) =>{
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>'p/";
+  //   string += ele[0];
+  //   string += "'</span>";
+  //   string += SPACE.repeat(16 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
+  // command.projects.cybersec.forEach((ele) =>{
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>'p/";
+  //   string += ele[0];
+  //   string += "'</span>";
+  //   string += SPACE.repeat(16 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
+  // command.projects.robotics.forEach((ele) =>{
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>'p/";
+  //   string += ele[0];
+  //   string += "'</span>";
+  //   string += SPACE.repeat(16 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
 
-  socials.commands.forEach((ele) => {
-    const SPACE = "&nbsp;";
-    let string = "";
-    string += SPACE.repeat(1);
-    string += "<span class='command'>";
-    string += ele[0];
-    string += "</span>";
+  // socials.commands.forEach((ele) => {
+  //   const SPACE = "&nbsp;";
+  //   let string = "";
+  //   string += SPACE.repeat(1);
+  //   string += "<span class='command'>";
+  //   string += ele[0];
+  //   string += "</span>";
     
-    string += SPACE.repeat(20 - ele[0].length);
-    string += ele[1];
-    help.push(string);
-  })
+  //   string += SPACE.repeat(20 - ele[0].length);
+  //   string += ele[1];
+  //   help.push(string);
+  // })
 
   help.push("<br>");
   help.push("Press <span class='keys'>[Tab]</span> for auto completion.");
