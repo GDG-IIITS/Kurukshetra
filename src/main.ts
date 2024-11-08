@@ -552,7 +552,7 @@ function easterEggStyles() {
 
 const initEventListeners = () => {
   if(HOST) {
-    HOST.innerText= command.hostname;
+    HOST.innerText = command.hostname;
   }
 
   if(USER) {
@@ -560,16 +560,23 @@ const initEventListeners = () => {
   }
 
   if(PRE_HOST) {
-    PRE_HOST.innerText= command.hostname;
+    PRE_HOST.innerText = command.hostname;
   }
 
   if(PRE_USER) {
     PRE_USER.innerText = command.username;
   } 
 
+  // Check if document is already loaded
+  if (document.readyState === 'complete') {
+    // Document already loaded, execute banner immediately
+    writeLines(BANNER);
+  } else {
+    // Document not loaded yet, add event listener
     window.addEventListener('load', () => {
-    writeLines(BANNER);  
-  });
+      writeLines(BANNER);  
+    });
+  }
   
   USERINPUT.addEventListener('keypress', userInputHandler);
   USERINPUT.addEventListener('keydown', userInputHandler);
@@ -578,8 +585,6 @@ const initEventListeners = () => {
   window.addEventListener('click', () => {
     USERINPUT.focus();
   });
-
-  // console.log(`%cPassword: ${command.password}`, "color: red; font-size: 20px;");
 }
 
 initEventListeners();
