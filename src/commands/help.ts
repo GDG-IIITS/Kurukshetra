@@ -41,6 +41,10 @@ const helpObj = {
       "---[Kurukshetra]--"
     ],
     [
+      "'rules'",
+      "Sigme peopl play by the rules"
+    ],
+    [
       "'challenge'",
       "Show your mental muscle"
     ],

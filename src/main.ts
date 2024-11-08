@@ -17,7 +17,11 @@ let tempInput = ""
 let userInput : string;
 let isSudo = false;
 let isPasswordInput = false;
+let isEmailInput = false;
+let isKeyInput = false;
 let passwordCounter = 0;
+let emailCounter = 0;
+let keyCounter = 0;
 let bareMode = false;
 
 //WRITELINESCOPY is used to during the "clear" command
@@ -27,12 +31,16 @@ const USERINPUT = document.getElementById("user-input") as HTMLInputElement;
 const INPUT_HIDDEN = document.getElementById("input-hidden");
 const PASSWORD = document.getElementById("password-input");
 const PASSWORD_INPUT = document.getElementById("password-field") as HTMLInputElement;
+const EMAIL = document.getElementById("email-input");
+const EMAIL_INPUT = document.getElementById("email-field") as HTMLInputElement;
+const KEY = document.getElementById("key-input");
+const KEY_INPUT = document.getElementById("key-field") as HTMLInputElement;
 const PRE_HOST = document.getElementById("pre-host");
 const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
-const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about"];
+const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about", "help", "rules"];
 const HISTORY : string[] = [];
 const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
@@ -58,10 +66,20 @@ function userInputHandler(e : KeyboardEvent) {
   switch(key) {
     case "Enter":
       e.preventDefault();
-      if (!isPasswordInput) {
-        enterKey();
-      } else {
+      if (isEmailInput) {
+        
+        emailHandler();
+      }else if (isPasswordInput) {
+
         passwordHandler();
+        
+      } else if (isKeyInput) {
+
+        keyHandler();
+        
+      }
+       else {
+        enterKey();
       }
 
       scrollToBottom();
@@ -385,22 +403,38 @@ function commandHandler(input : string) {
         writeLines(["Permission not granted.", "<br>"])
       }
         break;
-    case 'sudo':
+    case 'register':
       if(bareMode) {
         writeLines(["no.", "<br>"])
         break;
       }
-      if(!PASSWORD) return
-      isPasswordInput = true;
+      if(!EMAIL) return
+      isEmailInput = true;
       USERINPUT.disabled = true;
 
       if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-      PASSWORD.style.display = "block";
+      EMAIL.style.display = "block";
       setTimeout(() => {
-        PASSWORD_INPUT.focus();
+        EMAIL_INPUT.focus();
       }, 100);
 
       break;
+    case 'sudo':
+        if(bareMode) {
+          writeLines(["no.", "<br>"])
+          break;
+        }
+        if(!PASSWORD) return
+        isPasswordInput = true;
+        USERINPUT.disabled = true;
+  
+        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+        PASSWORD.style.display = "block";
+        setTimeout(() => {
+          PASSWORD_INPUT.focus();
+        }, 100);
+  
+        break;
     case 'p/insiiits':
       
       break;
@@ -500,6 +534,32 @@ function revertPasswordChanges() {
     }, 200)
 }
 
+function revertEmailChanges() {
+  if (!INPUT_HIDDEN || !EMAIL) return
+  EMAIL_INPUT.value = "";
+  USERINPUT.disabled = false;
+  INPUT_HIDDEN.style.display = "block";
+  EMAIL.style.display = "none";
+  isEmailInput = false;
+
+  setTimeout(() => {
+    USERINPUT.focus();
+  }, 200)
+}
+
+function revertKeyChanges() {
+  if (!INPUT_HIDDEN || !KEY) return
+  KEY_INPUT.value = "";
+  USERINPUT.disabled = false;
+  INPUT_HIDDEN.style.display = "block";
+  KEY.style.display = "none";
+  isKeyInput = false;
+
+  setTimeout(() => {
+    USERINPUT.focus();
+  }, 200)
+}
+
 function passwordHandler() {
   if (passwordCounter === 2) {
     if (!INPUT_HIDDEN || !mutWriteLines || !PASSWORD) return
@@ -509,14 +569,98 @@ function passwordHandler() {
     return
   }
 
-  if (PASSWORD_INPUT.value === SUDO_PASSWORD) {
+  if (PASSWORD_INPUT.value) {
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    writeLines(["<br>", "Registered", "Try <span class='command'>'rm -rf'</span>", "<br>"])
+
+    //API call here
+
+    revertPasswordChanges();
+    isSudo = true;
+    return
+  } else {
+    PASSWORD_INPUT.value = "";
+    passwordCounter++;
+  }
+}
+
+function emailHandler() {
+  if (emailCounter === 2) {
+    if (!INPUT_HIDDEN || !mutWriteLines || !EMAIL) return;
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"]);
+    revertEmailChanges();
+    emailCounter = 0;
+    return;
+  }
+
+  const emailInput = EMAIL_INPUT.value.trim();
+
+  // Validate email format
+  const emailRegex = /^(\w+)\.(\w+)(\d+)@iiits\.in$/;
+  if (emailRegex.test(emailInput)) {
+
+    if (!INPUT_HIDDEN || !EMAIL) return
+    //EMAIL_INPUT.value = "";
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    EMAIL.style.display = "none";
+    isEmailInput = false;
+
+      setTimeout(() => {
+        USERINPUT.focus();
+      }, 200)
+
+    if(!PASSWORD) return
+        isPasswordInput = true;
+        USERINPUT.disabled = true;
+  
+        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+        PASSWORD.style.display = "block";
+        setTimeout(() => {
+          PASSWORD_INPUT.focus();
+        }, 100);
+
+
+    
+  }else {
+
+
+    writeLines(["<br>", "INVALID EMAIL FORMAT.", "Email should be in the format: name.lastnamenumber@iiits.in", "<br>"]);
+    EMAIL_INPUT.value = "";
+    emailCounter++;
+    return;
+
+
+  }
+
+  // if (emailInput === SUDO_PASSWORD) {
+  //   if (!mutWriteLines || !mutWriteLines.parentNode) return;
+  //   writeLines(["<br>", "PERMISSION GRANTED.", "Try <span class='command'>'rm -rf'</span>", "<br>"]);
+  //   revertEmailChanges();
+  //   isSudo = true;
+  //   return;
+  // } else {
+  //   EMAIL_INPUT.value = "";
+  //   emailCounter++;
+  // }
+}
+function keyHandler() {
+  if (keyCounter === 2) {
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    revertKeyChanges();
+    keyCounter = 0;
+    return
+  }
+
+  if (KEY_INPUT.value === SUDO_PASSWORD) {
     if (!mutWriteLines || !mutWriteLines.parentNode) return
     writeLines(["<br>", "PERMISSION GRANTED.", "Try <span class='command'>'rm -rf'</span>", "<br>"])
     revertPasswordChanges();
     isSudo = true;
     return
   } else {
-    PASSWORD_INPUT.value = "";
+    KEY_INPUT.value = "";
     passwordCounter++;
   }
 }
@@ -581,6 +725,8 @@ const initEventListeners = () => {
   USERINPUT.addEventListener('keypress', userInputHandler);
   USERINPUT.addEventListener('keydown', userInputHandler);
   PASSWORD_INPUT.addEventListener('keypress', userInputHandler);
+  EMAIL_INPUT.addEventListener('keypress', userInputHandler);
+  // KEY_INPUT.addEventListener('keypress', userInputHandler);
 
   window.addEventListener('click', () => {
     USERINPUT.focus();
