@@ -21,6 +21,8 @@ let isPasswordInput = false;
 let isEmailInput = false;
 let isKeyInput = false;
 let isNameInput = false;
+let isTeamInput = false;
+let isTokenInput = false;
 let passwordCounter = 0;
 let emailCounter = 0;
 let keyCounter = 0;
@@ -41,12 +43,18 @@ const KEY = document.getElementById("key-input");
 const KEY_INPUT = document.getElementById("key-field") as HTMLInputElement;
 const NAME = document.getElementById("name-input");
 const NAME_INPUT = document.getElementById("name-field") as HTMLInputElement;
+const TEAM = document.getElementById("team-input");
+const TEAM_INPUT = document.getElementById("team-field") as HTMLInputElement;
+const CHALLENGEID = document.getElementById("challengeid-input");
+const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
+const TOKEN = document.getElementById("token-input");
+const TOKEN_INPUT = document.getElementById("token-field") as HTMLInputElement;
 const PRE_HOST = document.getElementById("pre-host");
 const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
-const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about", "help", "rules"];
+const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about", "help", "rules", "verify"];
 const HISTORY : string[] = [];
 const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
@@ -93,6 +101,18 @@ function userInputHandler(e : KeyboardEvent) {
         console.log("Name handler is called");
 
         nameHandler();
+        
+      } else if (isTeamInput) {
+
+        console.log("Name handler is called");
+
+        teamHandler();
+        
+      } else if (isTokenInput) {
+
+        console.log("Name handler is called");
+
+        tokenHandler();
         
       }
        else {
@@ -501,38 +521,64 @@ async function commandHandler(input : string) {
 
       case 'create-team':
 
+      if(!TEAM) return
+      isTeamInput = true;
+      USERINPUT.disabled = true;
+
+      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      TEAM.style.display = "block";
+      setTimeout(() => {
+        TEAM_INPUT.focus();
+      }, 100);
+
+      break;
+
+      case 'verify':
+
+      if(!TOKEN) return
+      isTokenInput = true;
+      USERINPUT.disabled = true;
+
+      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      TOKEN.style.display = "block";
+      setTimeout(() => {
+        TOKEN_INPUT.focus();
+      }, 100);
+
+      break;
+
       case 'logout':
         try {
-        const response = await fetch('https://api.chakravyuh.live/auth/logout', {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+                const response = await fetch('https://api.chakravyuh.live/auth/logout', {
+                  method: 'DELETE',
+                  credentials: 'include',
+                  headers: {
+                      'Content-Type': 'application/json'
+                    }
+                });
     
-    if (!response.ok) {
-      const errorBody = await response.json();
-      throw new Error(`${response.status}: ${errorBody.message || 'Logout failed'}`);
-    }
+          if (!response.ok) {
+         const errorBody = await response.json();
+            throw new Error(`${response.status}: ${errorBody.message || 'Logout failed'}`);
+          }
     
-    writeLines([
-      "Successfully logged out!",
-      "<br>"
-    ]);
-  } catch (error: unknown) {
-    let errorMessage = 'Error during logout';
+             writeLines([
+           "Successfully logged out!",
+          "<br>"
+          ]);
+          } catch (error: unknown) {
+          let errorMessage = 'Error during logout';
     
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
+          if (error instanceof Error) {
+          errorMessage = error.message;
+          }
     
-    writeLines([
-      `Error: ${errorMessage}`,
-      "<br>"
-    ]);
-  }
-  break;
+          writeLines([
+          `Error: ${errorMessage}`,
+            "<br>"
+            ]);
+            }
+          break;
 
 
     case 'sudo':
@@ -710,7 +756,7 @@ function passwordHandler() {
 
       fetch('https://api.chakravyuh.live/auth/login', {
         method: 'POST',
-       // mode: 'cors', 
+       
         //credentials: 'include', 
         headers: {
             'Content-Type': 'application/json',
@@ -746,7 +792,7 @@ function passwordHandler() {
       console.log(PASSWORD_INPUT.value);
       console.log(NAME_INPUT.value);
 
-          fetch('https://api.chakravyuh.live/auth/register', {
+      fetch('https://api.chakravyuh.live/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -760,12 +806,34 @@ function passwordHandler() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
+           // writeLines(["<br>", "Registered, Now check your mail and use the token for verification", "Try <span class='command'>'verify'</span>", "<br>"])
         
         })
         .catch((error) => {
             console.error('Error:', error);
         });
+
+        fetch('https://api.chakravyuh.live/auth/verify-email/init', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              frontendBase : "https://abhijit.com",
+              
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            writeLines(["<br>", "Registered, Now check your mail and use the token for verification", "Try <span class='command'>'verify'</span>", "<br>"])
+      
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+      
 
 
 
@@ -944,6 +1012,130 @@ function nameHandler() {
   }
 }
 
+function teamHandler() {
+
+  console.log("Name handler is called");
+  if (nameCounter === 2) {
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    revertNameChanges();
+    keyCounter = 0;
+    return
+  }
+
+  if (TEAM_INPUT.value) {
+
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
+
+    if (!INPUT_HIDDEN || !TEAM) return
+
+
+      USERINPUT.disabled = false;
+      INPUT_HIDDEN.style.display = "block";
+      TEAM.style.display = "none";
+      isTeamInput = false;
+
+        setTimeout(() => {
+          USERINPUT.focus();
+        }, 200)
+
+
+      fetch('https://api.chakravyuh.live/auth/me', {
+        method: 'GET',
+        credentials: 'include',
+         headers: {
+          'Content-Type': 'application/json', 
+          // 'Cookie': cookie
+          },
+        // body: JSON.stringify({
+        //   name: TEAM_INPUT.value,
+          
+        // })
+      })
+        .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+          writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
+  
+        })
+      .catch((error) => {
+        console.error('Error:', error);
+        });
+
+    
+
+
+
+    return
+  } else {
+    NAME_INPUT.value = "";
+    nameCounter++;
+  }
+}
+
+
+function tokenHandler() {
+
+  console.log("Name handler is called");
+  if (nameCounter === 2) {
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    revertNameChanges();
+    keyCounter = 0;
+    return
+  }
+
+  if (TOKEN_INPUT.value) {
+
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
+
+    if (!INPUT_HIDDEN || !TOKEN) return
+
+
+      USERINPUT.disabled = false;
+      INPUT_HIDDEN.style.display = "block";
+      TOKEN.style.display = "none";
+      isTokenInput = false;
+
+        setTimeout(() => {
+          USERINPUT.focus();
+        }, 200)
+
+        let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
+
+
+      fetch(token, {
+        method: 'POST',
+        credentials: 'include',
+         headers: {
+          'Content-Type': 'application/json'
+          },
+        //   body: JSON.stringify({
+        //   name: TEAM_INPUT.value,
+          
+        // })
+      })
+        .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+          writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
+  
+        })
+      .catch((error) => {
+        console.error('Error:', error);
+        });
+
+    
+
+
+
+    return
+  } else {
+    NAME_INPUT.value = "";
+    nameCounter++;
+  }
+}
+
 function easterEggStyles() {   
   const bars = document.getElementById("bars");
   const body = document.body;
@@ -1006,6 +1198,8 @@ const initEventListeners = () => {
   PASSWORD_INPUT.addEventListener('keypress', userInputHandler);
   EMAIL_INPUT.addEventListener('keypress', userInputHandler);
   NAME_INPUT.addEventListener('keypress', userInputHandler);
+  TEAM_INPUT.addEventListener('keypress', userInputHandler);
+  TOKEN_INPUT.addEventListener('keypress', userInputHandler);
   // KEY_INPUT.addEventListener('keypress', userInputHandler);
 
   window.addEventListener('click', () => {
