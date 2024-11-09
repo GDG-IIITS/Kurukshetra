@@ -21,6 +21,7 @@ let isSudo = false;
 let isPasswordInput = false;
 let isEmailInput = false;
 let isKeyInput = false;
+let isChallengeidInput = false;
 let isNameInput = false;
 let isTeamInput = false;
 let isTokenInput = false;
@@ -47,8 +48,8 @@ const NAME = document.getElementById("name-input");
 const NAME_INPUT = document.getElementById("name-field") as HTMLInputElement;
 const TEAM = document.getElementById("team-input");
 const TEAM_INPUT = document.getElementById("team-field") as HTMLInputElement;
-//const CHALLENGEID = document.getElementById("challengeid-input");
-//const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
+const CHALLENGEID = document.getElementById("challengeid-input");
+const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
 const TOKEN = document.getElementById("token-input");
 const TOKEN_INPUT = document.getElementById("token-field") as HTMLInputElement;
 const TID = document.getElementById("tid-input");
@@ -123,6 +124,12 @@ function userInputHandler(e : KeyboardEvent) {
         console.log("Name handler is called");
 
         tidHandler();
+        
+      } else if (isTidInput) {
+
+        console.log("Name handler is called");
+
+        challengeidHandler();
         
       }
        else {
@@ -677,6 +684,20 @@ async function commandHandler(input : string) {
 
       break;
 
+      case 'submit':
+
+      if(!CHALLENGEID) return
+      isChallengeidInput = true;
+      USERINPUT.disabled = true;
+
+      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      CHALLENGEID.style.display = "block";
+      setTimeout(() => {
+        CHALLENGEID_INPUT.focus();
+      }, 100);
+
+      break;
+
       case 'join-team':
 
       if(!TID) return
@@ -1089,19 +1110,37 @@ function emailHandler() {
   // }
 }
 function keyHandler() {
-  if (keyCounter === 2) {
-    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
-    revertKeyChanges();
-    keyCounter = 0;
-    return
-  }
+  
 
-  if (KEY_INPUT.value === SUDO_PASSWORD) {
+  if (KEY_INPUT.value) {
     if (!mutWriteLines || !mutWriteLines.parentNode) return
-    writeLines(["<br>", "PERMISSION GRANTED.", "Try <span class='command'>'rm -rf'</span>", "<br>"])
-    revertPasswordChanges();
-    isSudo = true;
+
+
+    fetch('https://api.chakravyuh.live/challenges/submit', {
+      method: 'GET',
+      credentials: 'include',
+       headers: {
+        'Content-Type': 'application/json', 
+        // 'Cookie': cookie
+        },
+      body: JSON.stringify({
+        challengeId: CHALLENGEID_INPUT.value,
+        flag: KEY_INPUT.value
+        
+      })
+    })
+      .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
+
+      })
+    .catch((error) => {
+      console.error('Error:', error);
+      });
+    
+
+
     return
   } else {
     KEY_INPUT.value = "";
@@ -1336,6 +1375,47 @@ function tidHandler() {
   }
 }
 
+function challengeidHandler() {
+
+  console.log("challenge id handler is called");
+  
+  if (CHALLENGEID_INPUT.value) {
+
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
+
+    if (!INPUT_HIDDEN || !CHALLENGEID) return
+
+
+      USERINPUT.disabled = false;
+      INPUT_HIDDEN.style.display = "block";
+      CHALLENGEID.style.display = "none";
+      isChallengeidInput = false;
+
+        setTimeout(() => {
+          USERINPUT.focus();
+        }, 200)
+
+        if(!KEY) return
+        isKeyInput = true;
+        USERINPUT.disabled = true;
+  
+        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+        KEY.style.display = "block";
+        setTimeout(() => {
+          KEY_INPUT.focus();
+        }, 100);
+
+    
+
+
+
+    return
+  } else {
+    NAME_INPUT.value = "";
+    nameCounter++;
+  }
+}
+
 function easterEggStyles() {   
   const bars = document.getElementById("bars");
   const body = document.body;
@@ -1401,7 +1481,8 @@ const initEventListeners = () => {
   TEAM_INPUT.addEventListener('keypress', userInputHandler);
   TOKEN_INPUT.addEventListener('keypress', userInputHandler);
   TID_INPUT.addEventListener('keypress', userInputHandler);
-  // KEY_INPUT.addEventListener('keypress', userInputHandler);
+  KEY_INPUT.addEventListener('keypress', userInputHandler);
+  CHALLENGEID_INPUT.addEventListener('keypress', userInputHandler);
 
   window.addEventListener('click', () => {
     USERINPUT.focus();
