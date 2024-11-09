@@ -192,7 +192,7 @@ function arrowKeys(e : string) {
   }
 }
 
-function commandHandler(input : string) {
+async function commandHandler(input : string) {
   if(input.startsWith("rm -rf") && input.trim() !== "rm -rf") {
     if (isSudo) {
       if(input === "rm -rf src" && !bareMode) {
@@ -318,11 +318,44 @@ function commandHandler(input : string) {
       writeLines(HELP);
       break;
     case 'challenge':      
-      if(bareMode) {
+      
+      if (bareMode) {
         writeLines([`${command.username}`, "<br>"])
         break;
       }
-      writeLines(CHALLENGE);
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/challenges/me/todo', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }
+        
+        const challengeData = await response.json();
+        
+        writeLines([
+          `Current Challenge: ${challengeData.title}`,
+          "<br>"
+        ]);
+      } catch (error: unknown) {
+        let errorMessage = 'Error fetching challenge data';
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        
+        writeLines([
+          `Error: ${errorMessage}`,
+          "<br>"
+        ]);
+      }
       break;
     case 'about':
       if(bareMode) {
@@ -431,6 +464,7 @@ function commandHandler(input : string) {
         writeLines(["Permission not granted.", "<br>"])
       }
         break;
+
     case 'register':
       if(bareMode) {
         writeLines(["no.", "<br>"])
@@ -464,6 +498,43 @@ function commandHandler(input : string) {
       }, 100);
 
       break;
+
+      case 'create-team':
+
+      case 'logout':
+        try {
+        const response = await fetch('https://api.chakravyuh.live/auth/logout', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(`${response.status}: ${errorBody.message || 'Logout failed'}`);
+    }
+    
+    writeLines([
+      "Successfully logged out!",
+      "<br>"
+    ]);
+  } catch (error: unknown) {
+    let errorMessage = 'Error during logout';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    writeLines([
+      `Error: ${errorMessage}`,
+      "<br>"
+    ]);
+  }
+  break;
+
+
     case 'sudo':
         if(bareMode) {
           writeLines(["no.", "<br>"])
@@ -659,6 +730,8 @@ function passwordHandler() {
     })
     .then(data => {
         console.log('Success:', data);
+
+        writeLines(["<br>", "Logged in!!", "Try <span class='command'>'challenge'</span>", "<br>"])
         
     })
     .catch((error) => {

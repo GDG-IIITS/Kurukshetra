@@ -28,7 +28,7 @@ const helpObj = {
       "View your team"
     ],
     [
-      "'creat-team'",
+      "'create-team'",
       "create a new team"
     ],
     [

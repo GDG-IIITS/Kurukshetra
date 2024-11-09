@@ -17,7 +17,7 @@ async function fetchGET(url: string): Promise<any> {
 
 async function clickHandler(): Promise<any> {
 	try {
-		const returnedData = await fetchGET('https://api.chakravyuh.live/challenges');
+		const returnedData = await fetchGET('https://api.chakravyuh.live/challenges/me/todo');
 		return returnedData;
 	} catch (error) {
 		console.error('Some Error Occurred:', error);
@@ -28,8 +28,8 @@ export const challenge = async (): Promise<string[]> => {
 	const about: string[] = [];
 	try {
 		const data = await clickHandler();
-		if (data && data.name) {
-			about.push(data.name.first);
+		if (data && data.title) {
+			about.push(data.title);
 		}
 	} catch (error) {
 		console.error('Some Error Occurred:', error);
