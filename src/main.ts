@@ -125,7 +125,7 @@ function userInputHandler(e : KeyboardEvent) {
 
         tidHandler();
         
-      } else if (isTidInput) {
+      } else if (isChallengeidInput) {
 
         console.log("Name handler is called");
 
@@ -1115,9 +1115,21 @@ function keyHandler() {
   if (KEY_INPUT.value) {
     if (!mutWriteLines || !mutWriteLines.parentNode) return
 
+    if (!INPUT_HIDDEN || !KEY) return
+
+
+      USERINPUT.disabled = false;
+      INPUT_HIDDEN.style.display = "block";
+      KEY.style.display = "none";
+      isKeyInput = false;
+
+        setTimeout(() => {
+          USERINPUT.focus();
+        }, 200)
+
 
     fetch('https://api.chakravyuh.live/challenges/submit', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
        headers: {
         'Content-Type': 'application/json', 
@@ -1132,12 +1144,15 @@ function keyHandler() {
       .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
+        writeLines(["<br>", "Good!! time for the next one", "Try <span class='command'>'challenge'</span>", "<br>"])
 
       })
     .catch((error) => {
       console.error('Error:', error);
       });
+
+      KEY_INPUT.value = "";
+      CHALLENGEID_INPUT.value = "";
     
 
 
@@ -1390,6 +1405,7 @@ function challengeidHandler() {
       INPUT_HIDDEN.style.display = "block";
       CHALLENGEID.style.display = "none";
       isChallengeidInput = false;
+
 
         setTimeout(() => {
           USERINPUT.focus();
