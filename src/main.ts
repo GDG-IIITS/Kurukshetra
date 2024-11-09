@@ -379,7 +379,14 @@ async function commandHandler(input : string) {
         
         writeLines([
           `Current Challenge: ${challengeData.title}`,
-          "<br>"
+          "<br>",
+          `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Summary: ${challengeData.summary}</div>`,
+          "<br>",
+          `Tags: ${challengeData.tags.join(', ')}`,
+          "<br>",
+          `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
+          "<br>",
+          `Challenge no. : ${challengeData.no}`,
         ]);
       } catch (error: unknown) {
         let errorMessage = 'Error fetching challenge data';
