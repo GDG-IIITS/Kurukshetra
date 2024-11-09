@@ -379,6 +379,51 @@ async function commandHandler(input : string) {
       }
       break;
 
+      case 'team':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/teams/my', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }
+        
+        const teamData = await response.json();
+        
+        writeLines([
+          `Team name: ${teamData.name}`,
+          `Team score: ${teamData.score}`,
+          `Team UG: ${teamData.ug}`,
+          `Team join code: ${teamData.joinCode}`,
+          
+          "<br>"
+        ]);
+      } catch (error: unknown) {
+        let errorMessage = 'Error fetching challenge data';
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        
+        writeLines([
+          `Error: ${errorMessage}`,
+          "<br>"
+        ]);
+      }
+      break;
+
       case 'test':      
       
       if (bareMode) {
@@ -400,14 +445,11 @@ async function commandHandler(input : string) {
           throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
         }
         
-        const challengeData = await response.json();
         
-        writeLines([
-          `Current Challenge: ${challengeData.title}`,
-          "<br>"
-        ]);
+        
+        
       } catch (error: unknown) {
-        let errorMessage = 'Error fetching challenge data';
+        let errorMessage = 'Error fetching root data';
         
         if (error instanceof Error) {
           errorMessage = error.message;
@@ -442,12 +484,7 @@ async function commandHandler(input : string) {
           throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
         }
         
-        const challengeData = await response.json();
         
-        writeLines([
-          `Current Challenge: ${challengeData.title}`,
-          "<br>"
-        ]);
       } catch (error: unknown) {
         let errorMessage = 'Error fetching challenge data';
         
