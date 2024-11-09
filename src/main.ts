@@ -378,6 +378,89 @@ async function commandHandler(input : string) {
         ]);
       }
       break;
+
+      case 'test':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }
+        
+        const challengeData = await response.json();
+        
+        writeLines([
+          `Current Challenge: ${challengeData.title}`,
+          "<br>"
+        ]);
+      } catch (error: unknown) {
+        let errorMessage = 'Error fetching challenge data';
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        
+        writeLines([
+          `Error: ${errorMessage}`,
+          "<br>"
+        ]);
+      }
+      break;
+
+
+      case 'me':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/auth/me', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }
+        
+        const challengeData = await response.json();
+        
+        writeLines([
+          `Current Challenge: ${challengeData.title}`,
+          "<br>"
+        ]);
+      } catch (error: unknown) {
+        let errorMessage = 'Error fetching challenge data';
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        
+        writeLines([
+          `Error: ${errorMessage}`,
+          "<br>"
+        ]);
+      }
+      break;    
     case 'about':
       if(bareMode) {
         writeLines(["Nothing to see here.", "<br>"])
