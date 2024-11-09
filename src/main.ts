@@ -19,10 +19,13 @@ let isSudo = false;
 let isPasswordInput = false;
 let isEmailInput = false;
 let isKeyInput = false;
+let isNameInput = false;
 let passwordCounter = 0;
 let emailCounter = 0;
 let keyCounter = 0;
+let nameCounter = 0;
 let bareMode = false;
+let islogin = 0;
 
 //WRITELINESCOPY is used to during the "clear" command
 const WRITELINESCOPY = mutWriteLines;
@@ -35,6 +38,8 @@ const EMAIL = document.getElementById("email-input");
 const EMAIL_INPUT = document.getElementById("email-field") as HTMLInputElement;
 const KEY = document.getElementById("key-input");
 const KEY_INPUT = document.getElementById("key-field") as HTMLInputElement;
+const NAME = document.getElementById("name-input");
+const NAME_INPUT = document.getElementById("name-field") as HTMLInputElement;
 const PRE_HOST = document.getElementById("pre-host");
 const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
@@ -67,18 +72,31 @@ function userInputHandler(e : KeyboardEvent) {
     case "Enter":
       e.preventDefault();
       if (isEmailInput) {
+
+        console.log("email handler is called");
         
         emailHandler();
       }else if (isPasswordInput) {
 
+        console.log("pass handler is called");
+
         passwordHandler();
         
       } else if (isKeyInput) {
+        console.log("key handler is called");
 
         keyHandler();
         
+      } else if (isNameInput) {
+
+        console.log("Name handler is called");
+
+        nameHandler();
+        
       }
        else {
+
+        console.log(" is called");
         enterKey();
       }
 
@@ -419,6 +437,23 @@ function commandHandler(input : string) {
       }, 100);
 
       break;
+    case 'login':
+      if(bareMode) {
+        writeLines(["no.", "<br>"])
+        break;
+      }
+      islogin = 1;
+      if(!EMAIL) return
+      isEmailInput = true;
+      USERINPUT.disabled = true;
+
+      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      EMAIL.style.display = "block";
+      setTimeout(() => {
+        EMAIL_INPUT.focus();
+      }, 100);
+
+      break;
     case 'sudo':
         if(bareMode) {
           writeLines(["no.", "<br>"])
@@ -560,6 +595,19 @@ function revertKeyChanges() {
   }, 200)
 }
 
+function revertNameChanges() {
+  if (!INPUT_HIDDEN || !NAME) return
+  NAME_INPUT.value = "";
+  USERINPUT.disabled = false;
+  INPUT_HIDDEN.style.display = "block";
+  NAME.style.display = "none";
+  isNameInput = false;
+
+  setTimeout(() => {
+    USERINPUT.focus();
+  }, 200)
+}
+
 function passwordHandler() {
   if (passwordCounter === 2) {
     if (!INPUT_HIDDEN || !mutWriteLines || !PASSWORD) return
@@ -571,12 +619,63 @@ function passwordHandler() {
 
   if (PASSWORD_INPUT.value) {
     if (!mutWriteLines || !mutWriteLines.parentNode) return
-    writeLines(["<br>", "Registered", "Try <span class='command'>'rm -rf'</span>", "<br>"])
-
+    
     //API call here
 
+    if (islogin == 1) {
+
+        fetch('api.chakravyuh.live/auth/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email: EMAIL_INPUT.value,
+              password: PASSWORD_INPUT.value
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+          writeLines(["<br>", "Logged In", "Try <span class='command'>'team'</span>", "<br>"])
+      
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+
+    }else {
+
+          fetch('api.chakravyuh.live/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: EMAIL_INPUT.value,
+                password: PASSWORD_INPUT.value,
+                fullname: NAME_INPUT.value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            writeLines(["<br>", "Logged In", "Try <span class='command'>'team'</span>", "<br>"])
+        
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+
+
+    }
+
+    
+
+
     revertPasswordChanges();
-    isSudo = true;
+    //isSudo = true;
     return
   } else {
     PASSWORD_INPUT.value = "";
@@ -610,7 +709,10 @@ function emailHandler() {
         USERINPUT.focus();
       }, 200)
 
-    if(!PASSWORD) return
+
+      if (islogin == 1) {
+
+        if(!PASSWORD) return
         isPasswordInput = true;
         USERINPUT.disabled = true;
   
@@ -619,6 +721,36 @@ function emailHandler() {
         setTimeout(() => {
           PASSWORD_INPUT.focus();
         }, 100);
+
+        islogin = 0;
+        
+      } else {
+
+        if(!NAME) return
+        isNameInput = true;
+        USERINPUT.disabled = true;
+  
+        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+        NAME.style.display = "block";
+        setTimeout(() => {
+          NAME_INPUT.focus();
+        }, 100);
+
+        
+
+
+      }
+
+
+    // if(!PASSWORD) return
+    //     isPasswordInput = true;
+    //     USERINPUT.disabled = true;
+  
+    //     if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+    //     PASSWORD.style.display = "block";
+    //     setTimeout(() => {
+    //       PASSWORD_INPUT.focus();
+    //     }, 100);
 
 
     
@@ -662,6 +794,53 @@ function keyHandler() {
   } else {
     KEY_INPUT.value = "";
     passwordCounter++;
+  }
+}
+
+function nameHandler() {
+
+  console.log("Name handler is called");
+  if (nameCounter === 2) {
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    revertNameChanges();
+    keyCounter = 0;
+    return
+  }
+
+  if (NAME_INPUT.value) {
+    // if (!mutWriteLines || !mutWriteLines.parentNode) return
+
+    // if (!INPUT_HIDDEN || !NAME) return
+
+
+    // USERINPUT.disabled = false;
+    // INPUT_HIDDEN.style.display = "block";
+    // NAME.style.display = "none";
+    // isNameInput = false;
+
+    //   setTimeout(() => {
+    //     USERINPUT.focus();
+    //   }, 200)
+    
+    
+    // if(!PASSWORD) return
+    //     isPasswordInput = true;
+    //     USERINPUT.disabled = true;
+  
+    //     if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+    //     PASSWORD.style.display = "block";
+    //     setTimeout(() => {
+    //       PASSWORD_INPUT.focus();
+    //     }, 100);
+
+    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+
+
+    return
+  } else {
+    NAME_INPUT.value = "";
+    nameCounter++;
   }
 }
 
@@ -726,6 +905,7 @@ const initEventListeners = () => {
   USERINPUT.addEventListener('keydown', userInputHandler);
   PASSWORD_INPUT.addEventListener('keypress', userInputHandler);
   EMAIL_INPUT.addEventListener('keypress', userInputHandler);
+  NAME_INPUT.addEventListener('keypress', userInputHandler);
   // KEY_INPUT.addEventListener('keypress', userInputHandler);
 
   window.addEventListener('click', () => {
