@@ -4,12 +4,13 @@ import { BANNER } from "./commands/banner";
 import { ABOUT } from "./commands/about"
 import { DEFAULT } from "./commands/default";
 import { PROJECTS } from "./commands/projects";
-import { createWhoami } from "./commands/whoami";
+//import { createWhoami } from "./commands/whoami";
 import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
 import { ACHIEVEMENTS } from "./commands/achievements";
-import { CHALLENGE } from './KurukshetraCommands/challenge';
+
 import { RULE } from './KurukshetraCommands/rules';
+
 
 //mutWriteLines gets deleted and reassigned
 let mutWriteLines = document.getElementById("write-lines");
@@ -45,8 +46,8 @@ const NAME = document.getElementById("name-input");
 const NAME_INPUT = document.getElementById("name-field") as HTMLInputElement;
 const TEAM = document.getElementById("team-input");
 const TEAM_INPUT = document.getElementById("team-field") as HTMLInputElement;
-const CHALLENGEID = document.getElementById("challengeid-input");
-const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
+//const CHALLENGEID = document.getElementById("challengeid-input");
+//const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
 const TOKEN = document.getElementById("token-input");
 const TOKEN_INPUT = document.getElementById("token-field") as HTMLInputElement;
 const PRE_HOST = document.getElementById("pre-host");

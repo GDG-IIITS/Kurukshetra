@@ -3,16 +3,16 @@ import command from '../../config.json' assert {type: 'json'};
 const createRules = () : string[] => {
   const about : string[] = [];
 
-  const SPACE = "&nbsp;";
+  //const SPACE = "&nbsp;";
 
-  const EMAIL = "Email";
-  const GITHUB = "Github";
-  const LINKEDIN = "Linkedin";
+  //const EMAIL = "Email";
+  // const GITHUB = "Github";
+  // const LINKEDIN = "Linkedin";
   
-  const email = `<i class='fa-solid fa-envelope'></i> ${EMAIL}`;   
-  const github = `<i class='fa-brands fa-github'></i> ${GITHUB}`;
-  const linkedin = `<i class='fa-brands fa-linkedin'></i> ${LINKEDIN}`;
-  let string = "";
+  //const email = `<i class='fa-solid fa-envelope'></i> ${EMAIL}`;   
+  //const github = `<i class='fa-brands fa-github'></i> ${GITHUB}`;
+  //const linkedin = `<i class='fa-brands fa-linkedin'></i> ${LINKEDIN}`;
+  //let string = "";
 
   about.push("<br>");
 //   about.push("Hello I am Abhijit Patil 🖐️,");

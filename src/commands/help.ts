@@ -1,4 +1,4 @@
-import command from '../../config.json' assert {type: 'json'};
+//import command from '../../config.json' assert {type: 'json'};
 
 const helpObj = {
   "commands": [
@@ -84,50 +84,50 @@ const helpObj = {
   ],
 }
 
-const socials = {
-  "commands": [
+// const socials = {
+//   "commands": [
     
-    [
-      "",
-      ""
-    ],
-    [
-      "",
-      "---[Socials]--"
-    ],
-    [
-      "'s/github'",
-      "Stalk me on GitHub (follow plz)"
-    ],
-    ["'s/linkedin'",
-      "Let's connect on Linkedin"
-    ],
-    ["'s/discord'",
-      "I am a pro-g(r)amer"
-    ],
-    ["'s/instagram'",
-      "Folow me on Instagram"
-    ],
-    ["'s/gcloud'",
-      "Felxin my google cloud skills"
-    ],
-    ["'s/gdeveloper'",
-      "Got to get my eyes on that google-dev profile"
-    ],
-    ["'s/unity'",
-      "Unity plz fix your servers(hire me to do that)"
-    ],
-    ["'s/email'",
-      "Mail me your deepest fears"
-    ],
-    ["'sudo'",
-      "???"
-    ],
-    ["'hackme'",
-      "??hacker"
-    ]
-  ],
-}
+//     [
+//       "",
+//       ""
+//     ],
+//     [
+//       "",
+//       "---[Socials]--"
+//     ],
+//     [
+//       "'s/github'",
+//       "Stalk me on GitHub (follow plz)"
+//     ],
+//     ["'s/linkedin'",
+//       "Let's connect on Linkedin"
+//     ],
+//     ["'s/discord'",
+//       "I am a pro-g(r)amer"
+//     ],
+//     ["'s/instagram'",
+//       "Folow me on Instagram"
+//     ],
+//     ["'s/gcloud'",
+//       "Felxin my google cloud skills"
+//     ],
+//     ["'s/gdeveloper'",
+//       "Got to get my eyes on that google-dev profile"
+//     ],
+//     ["'s/unity'",
+//       "Unity plz fix your servers(hire me to do that)"
+//     ],
+//     ["'s/email'",
+//       "Mail me your deepest fears"
+//     ],
+//     ["'sudo'",
+//       "???"
+//     ],
+//     ["'hackme'",
+//       "??hacker"
+//     ]
+//   ],
+// }
 
 const createHelp = () : string[] => {
   const help : string[] = []
