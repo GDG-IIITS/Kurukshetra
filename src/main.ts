@@ -24,6 +24,7 @@ let isKeyInput = false;
 let isNameInput = false;
 let isTeamInput = false;
 let isTokenInput = false;
+let isTidInput = false;
 let passwordCounter = 0;
 let emailCounter = 0;
 let keyCounter = 0;
@@ -50,6 +51,8 @@ const TEAM_INPUT = document.getElementById("team-field") as HTMLInputElement;
 //const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
 const TOKEN = document.getElementById("token-input");
 const TOKEN_INPUT = document.getElementById("token-field") as HTMLInputElement;
+const TID = document.getElementById("tid-input");
+const TID_INPUT = document.getElementById("tid-field") as HTMLInputElement;
 const PRE_HOST = document.getElementById("pre-host");
 const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
@@ -114,6 +117,12 @@ function userInputHandler(e : KeyboardEvent) {
         console.log("Name handler is called");
 
         tokenHandler();
+        
+      } else if (isTidInput) {
+
+        console.log("Name handler is called");
+
+        tidHandler();
         
       }
        else {
@@ -664,6 +673,20 @@ async function commandHandler(input : string) {
       TOKEN.style.display = "block";
       setTimeout(() => {
         TOKEN_INPUT.focus();
+      }, 100);
+
+      break;
+
+      case 'join-team':
+
+      if(!TID) return
+      isTidInput = true;
+      USERINPUT.disabled = true;
+
+      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      TID.style.display = "block";
+      setTimeout(() => {
+        TID_INPUT.focus();
       }, 100);
 
       break;
@@ -1257,6 +1280,62 @@ function tokenHandler() {
   }
 }
 
+function tidHandler() {
+
+  console.log("TID handler is called");
+  
+  if (TID_INPUT.value) {
+
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
+
+    if (!INPUT_HIDDEN || !TID) return
+
+
+      USERINPUT.disabled = false;
+      INPUT_HIDDEN.style.display = "block";
+      TID.style.display = "none";
+      isTidInput = false;
+
+        setTimeout(() => {
+          USERINPUT.focus();
+        }, 200)
+
+        //let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
+
+
+      fetch("https://api.chakravyuh.live/teams/join", {
+        method: 'POST',
+        credentials: 'include',
+         headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+
+            code: TID_INPUT.value,
+          
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+          writeLines(["<br>", "Team Joined", "Try <span class='command'>'team'</span>", "<br>"])
+  
+        })
+      .catch((error) => {
+        console.error('Error:', error);
+        });
+
+    
+
+
+
+    return
+  } else {
+    NAME_INPUT.value = "";
+    nameCounter++;
+  }
+}
+
 function easterEggStyles() {   
   const bars = document.getElementById("bars");
   const body = document.body;
@@ -1321,6 +1400,7 @@ const initEventListeners = () => {
   NAME_INPUT.addEventListener('keypress', userInputHandler);
   TEAM_INPUT.addEventListener('keypress', userInputHandler);
   TOKEN_INPUT.addEventListener('keypress', userInputHandler);
+  TID_INPUT.addEventListener('keypress', userInputHandler);
   // KEY_INPUT.addEventListener('keypress', userInputHandler);
 
   window.addEventListener('click', () => {

@@ -53,7 +53,7 @@ const helpObj = {
       "Sigme peopl play by the rules"
     ],
     [
-      "'challenge'",
+      "'challenges'",
       "Show your mental muscle"
     ],
     [
@@ -65,7 +65,7 @@ const helpObj = {
       "See your ranking"
     ],
     [
-      "'record'",
+      "'records'",
       "See your completed challenges"
     ],
     [
