@@ -9,6 +9,7 @@ import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
 import { ACHIEVEMENTS } from "./commands/achievements";
 import { CHALLENGE } from './KurukshetraCommands/challenge';
+import { RULE } from './KurukshetraCommands/rules';
 
 //mutWriteLines gets deleted and reassigned
 let mutWriteLines = document.getElementById("write-lines");
@@ -330,6 +331,15 @@ function commandHandler(input : string) {
       }
       writeLines(ABOUT);
       break;
+    case 'rules':
+      if(bareMode) {
+        writeLines(["Nothing to see here.", "<br>"])
+        break;
+      }
+      writeLines(RULE);
+      break;
+    
+    
     case 'projects':
       if(bareMode) {
         writeLines(["I don't want you to break the other projects.", "<br>"])
@@ -620,33 +630,50 @@ function passwordHandler() {
   if (PASSWORD_INPUT.value) {
     if (!mutWriteLines || !mutWriteLines.parentNode) return
     
-    //API call here
+    
 
     if (islogin == 1) {
 
-        fetch('api.chakravyuh.live/auth/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              email: EMAIL_INPUT.value,
-              password: PASSWORD_INPUT.value
-          })
-      })
-      .then(response => response.json())
-      .then(data => {
-          console.log('Success:', data);
-          writeLines(["<br>", "Logged In", "Try <span class='command'>'team'</span>", "<br>"])
-      
-      })
-      .catch((error) => {
-          console.error('Error:', error);
-      });
+      console.log(EMAIL_INPUT.value);
+      console.log(PASSWORD_INPUT.value);
+
+      fetch('https://api.chakravyuh.live/auth/login', {
+        method: 'POST',
+       // mode: 'cors', 
+        credentials: 'include', 
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            email: EMAIL_INPUT.value,
+            password: PASSWORD_INPUT.value
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+       
+        writeLines(["<br>", "Error connecting to server", "<br>"]);
+    })
 
     }else {
 
-          fetch('api.chakravyuh.live/auth/register', {
+      console.log(EMAIL_INPUT.value);
+      console.log(PASSWORD_INPUT.value);
+      console.log(NAME_INPUT.value);
+
+          fetch('https://api.chakravyuh.live/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -654,13 +681,13 @@ function passwordHandler() {
             body: JSON.stringify({
                 email: EMAIL_INPUT.value,
                 password: PASSWORD_INPUT.value,
-                fullname: NAME_INPUT.value
+                fullName: NAME_INPUT.value
             })
         })
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            writeLines(["<br>", "Logged In", "Try <span class='command'>'team'</span>", "<br>"])
+            writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
         
         })
         .catch((error) => {
@@ -722,7 +749,7 @@ function emailHandler() {
           PASSWORD_INPUT.focus();
         }, 100);
 
-        islogin = 0;
+        
         
       } else {
 
@@ -809,32 +836,32 @@ function nameHandler() {
   }
 
   if (NAME_INPUT.value) {
-    // if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!mutWriteLines || !mutWriteLines.parentNode) return
 
-    // if (!INPUT_HIDDEN || !NAME) return
+    if (!INPUT_HIDDEN || !NAME) return
 
 
-    // USERINPUT.disabled = false;
-    // INPUT_HIDDEN.style.display = "block";
-    // NAME.style.display = "none";
-    // isNameInput = false;
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    NAME.style.display = "none";
+    isNameInput = false;
 
-    //   setTimeout(() => {
-    //     USERINPUT.focus();
-    //   }, 200)
+      setTimeout(() => {
+        USERINPUT.focus();
+      }, 200)
     
     
-    // if(!PASSWORD) return
-    //     isPasswordInput = true;
-    //     USERINPUT.disabled = true;
+    if(!PASSWORD) return
+        isPasswordInput = true;
+        USERINPUT.disabled = true;
   
-    //     if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-    //     PASSWORD.style.display = "block";
-    //     setTimeout(() => {
-    //       PASSWORD_INPUT.focus();
-    //     }, 100);
+        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+        PASSWORD.style.display = "block";
+        setTimeout(() => {
+          PASSWORD_INPUT.focus();
+        }, 100);
 
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    // writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
 
 
     return

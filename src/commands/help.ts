@@ -11,6 +11,10 @@ const helpObj = {
       "if already registered"
     ],
     [
+      "'logout'",
+      ":("
+    ],
+    [
 
       "",
       ""
