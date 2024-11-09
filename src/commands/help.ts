@@ -15,6 +15,10 @@ const helpObj = {
       ":("
     ],
     [
+      "'verify'",
+      "use the token sent in mail to verify"
+    ],
+    [
 
       "",
       ""
@@ -68,6 +72,10 @@ const helpObj = {
 
       "",
       ""
+    ],
+    [
+      "'send-mail'",
+      "resend verification mail"
     ],
     [
       "'about'",
