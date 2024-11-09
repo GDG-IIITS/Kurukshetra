@@ -17,7 +17,7 @@ async function fetchGET(url: string): Promise<any> {
 
 async function clickHandler(): Promise<any> {
 	try {
-		const returnedData = await fetchGET('https://randomuser.me/api/');
+		const returnedData = await fetchGET('https://api.chakravyuh.live/challenges');
 		return returnedData;
 	} catch (error) {
 		console.error('Some Error Occurred:', error);

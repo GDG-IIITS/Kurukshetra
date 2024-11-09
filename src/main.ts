@@ -640,10 +640,10 @@ function passwordHandler() {
       fetch('https://api.chakravyuh.live/auth/login', {
         method: 'POST',
        // mode: 'cors', 
-        credentials: 'include', 
+        //credentials: 'include', 
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            //'Accept': 'application/json'
         },
         body: JSON.stringify({
             email: EMAIL_INPUT.value,
