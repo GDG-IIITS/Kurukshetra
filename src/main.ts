@@ -28,7 +28,7 @@ let isTokenInput = false;
 let isTidInput = false;
 let passwordCounter = 0;
 let emailCounter = 0;
-let keyCounter = 0;
+//let keyCounter = 0;
 let nameCounter = 0;
 let bareMode = false;
 let islogin = 0;
@@ -61,7 +61,7 @@ const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
 const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about", "help", "rules", "verify"];
 const HISTORY : string[] = [];
-const SUDO_PASSWORD = command.password;
+//const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
 const LINKEDIN_LINK = command.linkedinLink;
 const INSTAGRAM_LINK = command.instagramLink;
@@ -394,6 +394,48 @@ async function commandHandler(input : string) {
         ]);
       }
       break;
+
+      case 'records':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/challenges/me/done', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }
+        
+        const challengeData = await response.json();
+        
+        writeLines([
+          `Completed Challenges: ${challengeData.title}`,
+          "<br>"
+        ]);
+      } catch (error: unknown) {
+        let errorMessage = 'Error fetching challenge data';
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        
+        writeLines([
+          `Error: ${errorMessage}`,
+          "<br>"
+        ]);
+      }
+      break;
+
 
       case 'team':      
       
@@ -874,18 +916,18 @@ function revertEmailChanges() {
   }, 200)
 }
 
-function revertKeyChanges() {
-  if (!INPUT_HIDDEN || !KEY) return
-  KEY_INPUT.value = "";
-  USERINPUT.disabled = false;
-  INPUT_HIDDEN.style.display = "block";
-  KEY.style.display = "none";
-  isKeyInput = false;
+// function revertKeyChanges() {
+//   if (!INPUT_HIDDEN || !KEY) return
+//   KEY_INPUT.value = "";
+//   USERINPUT.disabled = false;
+//   INPUT_HIDDEN.style.display = "block";
+//   KEY.style.display = "none";
+//   isKeyInput = false;
 
-  setTimeout(() => {
-    USERINPUT.focus();
-  }, 200)
-}
+//   setTimeout(() => {
+//     USERINPUT.focus();
+//   }, 200)
+// }
 
 function revertNameChanges() {
   if (!INPUT_HIDDEN || !NAME) return
@@ -948,7 +990,7 @@ function passwordHandler() {
     .catch((error) => {
         console.error('Error:', error);
        
-        writeLines(["<br>", "Error connecting to server", "<br>"]);
+        writeLines(["<br>", error.message, "<br>"]);
     })
 
     }else {
@@ -975,7 +1017,7 @@ function passwordHandler() {
         
         })
         .catch((error) => {
-            console.error('Error:', error);
+            console.error('Error:', error.message);
         });
 
         fetch('https://api.chakravyuh.live/auth/verify-email/init', {
@@ -1170,7 +1212,7 @@ function nameHandler() {
     if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
     writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
     revertNameChanges();
-    keyCounter = 0;
+    //keyCounter = 0;
     return
   }
 
@@ -1217,7 +1259,7 @@ function teamHandler() {
     if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
     writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
     revertNameChanges();
-    keyCounter = 0;
+    //keyCounter = 0;
     return
   }
 
@@ -1279,7 +1321,7 @@ function tokenHandler() {
     if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
     writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
     revertNameChanges();
-    keyCounter = 0;
+    //keyCounter = 0;
     return
   }
 
