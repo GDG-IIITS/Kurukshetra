@@ -487,7 +487,7 @@ async function commandHandler(input : string) {
       }
       
       try {
-        const response = await fetch('https://api.chakravyuh.live/teams/leaderbord', {
+        const response = await fetch('https://api.chakravyuh.live/teams/leaderboard', {
           method: 'GET',
           credentials: 'include',
           headers: {
@@ -1196,26 +1196,6 @@ function passwordHandler() {
                 fullName: NAME_INPUT.value
             })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-           // writeLines(["<br>", "Registered, Now check your mail and use the token for verification", "Try <span class='command'>'verify'</span>", "<br>"])
-        
-        })
-        .catch((error) => {
-            console.error('Error:', error.message);
-        });
-
-        fetch('https://api.chakravyuh.live/auth/verify-email/init', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              frontendBase : "https://abhijit.com",
-              
-          })
-        })
         .then(async response => {
           const data = await response.json();
           
@@ -1236,6 +1216,37 @@ function passwordHandler() {
             "<br>"
           ]);
         });
+
+        // fetch('https://api.chakravyuh.live/auth/verify-email/init', {
+        //   method: 'POST',
+        //   headers: {
+        //       'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //       frontendBase : "https://abhijit.com",
+              
+        //   })
+        // })
+        // .then(async response => {
+        //   const data = await response.json();
+          
+        //   if (!response.ok) {
+        //     // If response is not ok, throw the error data
+        //     throw data;
+        //   }
+          
+        //   console.log('Success:', data);
+        //   writeLines(["<br>", "Registered, now use the verify command", "Try <span class='command'>'verify'</span>", "<br>"]);
+        // })
+        // .catch((error) => {
+        //   console.error('Error:', error);
+        //   // Display the error message from the API
+        //   writeLines([
+        //     "<br>",
+        //     `Error: ${error.message || 'Something went wrong'}`,
+        //     "<br>"
+        //   ]);
+        // });
 
       
 
