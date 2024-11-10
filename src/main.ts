@@ -388,17 +388,22 @@ async function commandHandler(input : string) {
           "<br>",
           `Challenge no. : ${challengeData.no}`,
         ]);
-      } catch (error: unknown) {
-        let errorMessage = 'Error fetching challenge data';
+      }catch (error: unknown) {
+        console.error('Error:', error);
         
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
         }
-        
-        writeLines([
-          `Error: ${errorMessage}`,
-          "<br>"
-        ]);
       }
       break;
 
@@ -426,15 +431,38 @@ async function commandHandler(input : string) {
             status: response.status
           };
         }
+
+        if (data.length === 0) {
+          writeLines([
+            "No challenges completed yet.",
+            "<br>"
+          ]);
+          break;
+        }
         
         writeLines([
-          `Completed Challenges: ${data.title}`,
+          "Completed Challenges:",
           "<br>"
         ]);
+
+        // Loop through each challenge in the array
+        data.forEach((challenge: any) => {
+          writeLines([
+            `<div style="margin-left: 10px;">`,
+            `Challenge #${challenge.no}: ${challenge.title}`,
+            "<br>",
+            `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%; margin-left: 10px;">Summary: ${challenge.summary}</div>`,
+            "<br>",
+            `Tags: ${challenge.tags.join(', ')}`,
+            "<br>",
+            "<br>",
+            `</div>`
+          ]);
+        });
+
       } catch (error: unknown) {
         console.error('Error:', error);
         
-        // Type guard to check if error is our API error type
         if (error && typeof error === 'object' && 'message' in error) {
           const apiError = error as { message: string; error?: string; statusCode?: number; };
           writeLines([
@@ -475,15 +503,35 @@ async function commandHandler(input : string) {
             status: response.status
           };
         }
+
+        if (data.length === 0) {
+          writeLines([
+            "No one yet.",
+            "<br>"
+          ]);
+          break;
+        }
         
-        // writeLines([
-        //   `Completed Challenges: ${data.title}`,
-        //   "<br>"
-        // ]);
+        
+
+        // Loop through each challenge in the array
+        data.forEach((team: any) => {
+          writeLines([
+            `<div style="margin-left: 10px;">`,
+            `Team #${team.no}: ${team.title}`,
+            "<br>",
+            `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%; margin-left: 10px;">Summary: ${team.summary}</div>`,
+            "<br>",
+            `Tags: ${team.tags.join(', ')}`,
+            "<br>",
+            "<br>",
+            `</div>`
+          ]);
+        });
+
       } catch (error: unknown) {
         console.error('Error:', error);
         
-        // Type guard to check if error is our API error type
         if (error && typeof error === 'object' && 'message' in error) {
           const apiError = error as { message: string; error?: string; statusCode?: number; };
           writeLines([
@@ -533,18 +581,24 @@ async function commandHandler(input : string) {
           "<br>"
         ]);
       } catch (error: unknown) {
-        let errorMessage = 'Error fetching challenge data';
+        console.error('Error:', error);
         
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
         }
-        
-        writeLines([
-          `Error: ${errorMessage}`,
-          "<br>"
-        ]);
       }
       break;
+      
 
       case 'test':      
       
@@ -571,16 +625,76 @@ async function commandHandler(input : string) {
         
         
       } catch (error: unknown) {
-        let errorMessage = 'Error fetching root data';
+        console.error('Error:', error);
         
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
+        }
+      }
+      break;
+
+      case 'send-mail':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/auth/verify-email/init', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            
+            
+            
+          })
+        });
+        
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+        }else{
+
+          writeLines([
+            "Mail sent !!",
+            "<br>"
+          ]);
+
         }
         
-        writeLines([
-          `Error: ${errorMessage}`,
-          "<br>"
-        ]);
+        
+        
+        
+      } catch (error: unknown) {
+        console.error('Error:', error);
+        
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
+        }
       }
       break;
 
@@ -607,19 +721,25 @@ async function commandHandler(input : string) {
         }
         
         
-      } catch (error: unknown) {
-        let errorMessage = 'Error fetching challenge data';
+      }catch (error: unknown) {
+        console.error('Error:', error);
         
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
         }
-        
-        writeLines([
-          `Error: ${errorMessage}`,
-          "<br>"
-        ]);
       }
-      break;    
+      break;
+
     case 'about':
       if(bareMode) {
         writeLines(["Nothing to see here.", "<br>"])
