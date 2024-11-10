@@ -479,82 +479,84 @@ async function commandHandler(input : string) {
       }
       break;
 
-      case 'leaderbord':      
+      case 'leaderboard':      
       
-      if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        if (bareMode) {
+          writeLines([`${command.username}`, "<br>"])
+          break;
+        }
+      
+       try {
+        const response = await fetch('https://api.chakravyuh.live/teams/leaderboard', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+         'Content-Type': 'application/json'
+        }
+        });
+  
+         const data = await response.json();
+
+                if (!response.ok) {
+            throw {
+              ...data,
+              status: response.status
+                  };
+        }
+
+        if (!Array.isArray(data) || data.length === 0) {
+         writeLines([
+          "No teams on leaderboard yet.",
+          "<br>"
+        ]);
+         break;
+        }
+
+              // Create an array to store all lines
+            const allLines = [
+           "Leaderboard:",
+         "<br>",
+          "<br>"
+          ];
+
+         // Add each team's information to the lines array
+          data.forEach((team: any, index: number) => {
+        allLines.push(
+          `<div style="margin-left: 10px; margin-bottom: 10px;">`,
+          `#${index + 1}. Team ${team.name}`,
+          "<br>",
+            `<div style="margin-left: 20px;">`,
+          `Score: ${team.score}`,
+          "<br>",
+          `Captain: ${team.lead?.fullName || 'Unknown'}`,
+         "<br>",
+          `</div>`,
+          `</div>`
+         );
+           });
+
+          // Make a single writeLines call with all the content
+                writeLines(allLines);
+
+          } catch (error: unknown) {
+          console.error('Error:', error);
+  
+          if (error && typeof error === 'object' && 'message' in error) {
+                const apiError = error as { message: string; error?: string; statusCode?: number; };
+         writeLines([
+           `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+         "<br>"
+          ]);
+          } else {
+           writeLines([
+              "An unexpected error occurred",
+              "<br>"
+          ]);
+              }
+          }
+
         break;
-      }
-      
-      try {
-  const response = await fetch('https://api.chakravyuh.live/teams/leaderboard', {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  
-  const data = await response.json();
-  
-  if (!response.ok) {
-    throw {
-      ...data,
-      status: response.status
-    };
-  }
-
-  if (!Array.isArray(data) || data.length === 0) {
-    writeLines([
-      "No teams on leaderboard yet.",
-      "<br>"
-    ]);
-    break;
-  }
-
-  // Create an array to store all lines
-  const allLines = [
-    "Leaderboard:",
-    "<br>",
-    "<br>"
-  ];
-
-  // Add each team's information to the lines array
-  data.forEach((team: any, index: number) => {
-    allLines.push(
-      `<div style="margin-left: 10px; margin-bottom: 10px;">`,
-      `#${index + 1}. Team ${team.name}`,
-      "<br>",
-      `<div style="margin-left: 20px;">`,
-      `Score: ${team.score}`,
-      "<br>",
-      `Captain: ${team.lead?.fullName || 'Unknown'}`,
-      "<br>",
-      `</div>`,
-      `</div>`
-    );
-  });
-
-  // Make a single writeLines call with all the content
-  writeLines(allLines);
-
-} catch (error: unknown) {
-  console.error('Error:', error);
-  
-  if (error && typeof error === 'object' && 'message' in error) {
-    const apiError = error as { message: string; error?: string; statusCode?: number; };
-    writeLines([
-      `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-      apiError.error ? `(${apiError.error})` : '',
-      "<br>"
-    ]);
-  } else {
-    writeLines([
-      "An unexpected error occurred",
-      "<br>"
-    ]);
-  }
-}
       case 'test':      
       
       if (bareMode) {
