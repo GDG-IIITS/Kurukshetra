@@ -13,7 +13,7 @@
   "rules":"rules",
   "title": "Abhijit Patil",
   "username": "Arjun",
-  "hostname": "Chakravyu",
+  "hostname": "Chakravyuh",
   "password": "112358",
   "gitLink": "https://github.com/abhijit-23blaze",
   "linkedinLink": "https://www.linkedin.com/in/abhijiiitpatil/",
@@ -441,10 +441,10 @@
   "colors": {
     "background": "#000000",
     "foreground": "#D6D5D4",
-    "banner": "#c4c4c4",
+    "banner": "#FFCFB3",
     "border": {
       "visible": true,
-      "color": "#807D7C"
+      "color": "#800000"
     },
     "prompt": {
       "default": "#01A0E4",
