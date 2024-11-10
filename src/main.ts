@@ -744,7 +744,7 @@ async function commandHandler(input : string) {
       const data = await response.json();
         
         writeLines([
-          `Name: ${data.fullNamename}`,
+          `Name: ${data.fullName}`,
           `Email: ${data.email}`,
           `UG: ${data.ug}`,
           // `Team join code: ${data.joinCode}`,
