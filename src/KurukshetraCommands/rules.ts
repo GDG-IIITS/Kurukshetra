@@ -16,7 +16,12 @@ const createRules = () : string[] => {
 
   about.push("<br>");
 //   about.push("Hello I am Abhijit Patil 🖐️,");
+  about.push(command.rule5);
   about.push(command.rules);
+  about.push(command.rules1);
+  
+  
+  
 //   about.push("currently attending IIIT Sri City in ECE branch.📍");
 //   about.push(command.aboutSkills);
 //   about.push("so don't judge me just yet.");
