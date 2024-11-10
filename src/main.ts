@@ -740,6 +740,18 @@ async function commandHandler(input : string) {
           const errorBody = await response.json();
           throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
         }
+
+      const data = await response.json();
+        
+        writeLines([
+          `Name: ${data.fullNamename}`,
+          `Email: ${data.email}`,
+          `UG: ${data.ug}`,
+          // `Team join code: ${data.joinCode}`,
+          // `Team lead name: ${data.lead.fullName}`,
+          
+          "<br>"
+        ]);
         
         
       }catch (error: unknown) {
@@ -1421,7 +1433,7 @@ function keyHandler() {
       }
       
       console.log('Success:', data);
-      writeLines(["<br>", "Good work!!", "Try <span class='command'>'challenges'</span>", "<br>"]);
+      writeLines(["<br>", "Good work!!", "Try <span class='command'>'challenge'</span>", "<br>"]);
     })
     .catch((error) => {
       console.error('Error:', error);

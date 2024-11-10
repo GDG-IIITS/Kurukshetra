@@ -77,9 +77,11 @@ const helpObj = {
       "'send-mail'",
       "resend verification mail"
     ],
+    
+
     [
-      "'about'",
-      "take a look at the team"
+      "'me'",
+      "see you details"
     ]
   ],
 }
