@@ -444,7 +444,7 @@
     "banner": "#FFCFB3",
     "border": {
       "visible": true,
-      "color": "#800000"
+      "color": "#807D7C"
     },
     "prompt": {
       "default": "#01A0E4",
