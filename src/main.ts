@@ -59,7 +59,7 @@ const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
-const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "record", "about", "help", "rules", "verify"];
+const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderbord", "records", "about", "help", "rules", "verify"];
 const HISTORY : string[] = [];
 //const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
@@ -418,31 +418,87 @@ async function commandHandler(input : string) {
           }
         });
         
+        const data = await response.json();
+        
         if (!response.ok) {
-          const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+          throw {
+            ...data,
+            status: response.status
+          };
         }
         
-        const challengeData = await response.json();
-        
         writeLines([
-          `Completed Challenges: ${challengeData.title}`,
+          `Completed Challenges: ${data.title}`,
           "<br>"
         ]);
       } catch (error: unknown) {
-        let errorMessage = 'Error fetching challenge data';
+        console.error('Error:', error);
         
-        if (error instanceof Error) {
-          errorMessage = error.message;
+        // Type guard to check if error is our API error type
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
         }
-        
-        writeLines([
-          `Error: ${errorMessage}`,
-          "<br>"
-        ]);
       }
       break;
 
+      case 'leaderbord':      
+      
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"])
+        break;
+      }
+      
+      try {
+        const response = await fetch('https://api.chakravyuh.live/teams/leaderbord', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw {
+            ...data,
+            status: response.status
+          };
+        }
+        
+        // writeLines([
+        //   `Completed Challenges: ${data.title}`,
+        //   "<br>"
+        // ]);
+      } catch (error: unknown) {
+        console.error('Error:', error);
+        
+        // Type guard to check if error is our API error type
+        if (error && typeof error === 'object' && 'message' in error) {
+          const apiError = error as { message: string; error?: string; statusCode?: number; };
+          writeLines([
+            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : '',
+            "<br>"
+          ]);
+        } else {
+          writeLines([
+            "An unexpected error occurred",
+            "<br>"
+          ]);
+        }
+      }
+      break;
 
       case 'team':      
       
@@ -472,6 +528,7 @@ async function commandHandler(input : string) {
           `Team score: ${teamData.score}`,
           `Team UG: ${teamData.ug}`,
           `Team join code: ${teamData.joinCode}`,
+          `Team lead name: ${teamData.lead.fullName}`,
           
           "<br>"
         ]);
@@ -981,24 +1038,26 @@ function passwordHandler() {
             password: PASSWORD_INPUT.value
         })
     })
-    .then(response => {
-        if (!response.ok) {
-            
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-
-        writeLines(["<br>", "Logged in!!", "Try <span class='command'>'challenge'</span>", "<br>"])
-        
+    .then(async response => {
+      const data = await response.json();
+      
+      if (!response.ok) {
+        // If response is not ok, throw the error data
+        throw data;
+      }
+      
+      console.log('Success:', data);
+      writeLines(["<br>", "Logged in! Start Hacking", "Try <span class='command'>'challenge'</span>", "<br>"]);
     })
     .catch((error) => {
-        console.error('Error:', error);
-       
-        writeLines(["<br>", error.message, "<br>"]);
-    })
+      console.error('Error:', error);
+      // Display the error message from the API
+      writeLines([
+        "<br>",
+        `Error: ${error.message || 'Something went wrong'}`,
+        "<br>"
+      ]);
+    });
 
     }else {
 
@@ -1037,14 +1096,25 @@ function passwordHandler() {
               
           })
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            writeLines(["<br>", "Registered, Now check your mail and use the token for verification", "Try <span class='command'>'verify'</span>", "<br>"])
-      
+        .then(async response => {
+          const data = await response.json();
+          
+          if (!response.ok) {
+            // If response is not ok, throw the error data
+            throw data;
+          }
+          
+          console.log('Success:', data);
+          writeLines(["<br>", "Registered, now use the verify command", "Try <span class='command'>'verify'</span>", "<br>"]);
         })
         .catch((error) => {
-            console.error('Error:', error);
+          console.error('Error:', error);
+          // Display the error message from the API
+          writeLines([
+            "<br>",
+            `Error: ${error.message || 'Something went wrong'}`,
+            "<br>"
+          ]);
         });
 
       
@@ -1185,20 +1255,31 @@ function keyHandler() {
         // 'Cookie': cookie
         },
       body: JSON.stringify({
-        challengeId: CHALLENGEID_INPUT.value,
+        challengeNo: +CHALLENGEID_INPUT.value,
         flag: KEY_INPUT.value
         
       })
     })
-      .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-        writeLines(["<br>", "Good!! time for the next one", "Try <span class='command'>'challenge'</span>", "<br>"])
-
-      })
+    .then(async response => {
+      const data = await response.json();
+      
+      if (!response.ok) {
+        // If response is not ok, throw the error data
+        throw data;
+      }
+      
+      console.log('Success:', data);
+      writeLines(["<br>", "Good work!!", "Try <span class='command'>'challenges'</span>", "<br>"]);
+    })
     .catch((error) => {
       console.error('Error:', error);
-      });
+      // Display the error message from the API
+      writeLines([
+        "<br>",
+        `Error: ${error.message || 'Something went wrong'}`,
+        "<br>"
+      ]);
+    });
 
       KEY_INPUT.value = "";
       CHALLENGEID_INPUT.value = "";
@@ -1287,28 +1368,38 @@ function teamHandler() {
         }, 200)
 
 
-      fetch('https://api.chakravyuh.live/auth/me', {
-        method: 'GET',
+      fetch('https://api.chakravyuh.live/teams', {
+        method: 'POST',
         credentials: 'include',
          headers: {
           'Content-Type': 'application/json', 
           // 'Cookie': cookie
           },
-        // body: JSON.stringify({
-        //   name: TEAM_INPUT.value,
+        body: JSON.stringify({
+          name: TEAM_INPUT.value,
           
-        // })
-      })
-        .then(response => response.json())
-      .then(data => {
-          console.log('Success:', data);
-          writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
-  
         })
+      })
+      .then(async response => {
+        const data = await response.json();
+        
+        if (!response.ok) {
+          // If response is not ok, throw the error data
+          throw data;
+        }
+        
+        console.log('Success:', data);
+        writeLines(["<br>", "Team Created, others can now join this team by using join-team", "Try <span class='command'>'team'</span>", "<br>"]);
+      })
       .catch((error) => {
         console.error('Error:', error);
-        });
-
+        // Display the error message from the API
+        writeLines([
+          "<br>",
+          `Error: ${error.message || 'Something went wrong'}`,
+          "<br>"
+        ]);
+      });
     
 
 
@@ -1362,15 +1453,26 @@ function tokenHandler() {
           
         // })
       })
-        .then(response => response.json())
-      .then(data => {
-          console.log('Success:', data);
-          writeLines(["<br>", "Registered", "Try <span class='command'>'team'</span>", "<br>"])
-  
-        })
+      .then(async response => {
+        const data = await response.json();
+        
+        if (!response.ok) {
+          // If response is not ok, throw the error data
+          throw data;
+        }
+        
+        console.log('Success:', data);
+        writeLines(["<br>", "Verified!!", "Try <span class='command'>'challenge '</span>", "<br>"]);
+      })
       .catch((error) => {
         console.error('Error:', error);
-        });
+        // Display the error message from the API
+        writeLines([
+          "<br>",
+          `Error: ${error.message || 'Something went wrong'}`,
+          "<br>"
+        ]);
+      });
 
     
 
@@ -1406,26 +1508,35 @@ function tidHandler() {
         //let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
 
 
-      fetch("https://api.chakravyuh.live/teams/join", {
-        method: 'POST',
-        credentials: 'include',
-         headers: {
-          'Content-Type': 'application/json'
+        fetch("https://api.chakravyuh.live/teams/join", {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-
             code: TID_INPUT.value,
+          })
+        })
+        .then(async response => {
+          const data = await response.json();
           
-        })
-      })
-      .then(response => response.json())
-      .then(data => {
+          if (!response.ok) {
+            // If response is not ok, throw the error data
+            throw data;
+          }
+          
           console.log('Success:', data);
-          writeLines(["<br>", "Team Joined", "Try <span class='command'>'team'</span>", "<br>"])
-  
+          writeLines(["<br>", "Team Joined", "Try <span class='command'>'team'</span>", "<br>"]);
         })
-      .catch((error) => {
-        console.error('Error:', error);
+        .catch((error) => {
+          console.error('Error:', error);
+          // Display the error message from the API
+          writeLines([
+            "<br>",
+            `Error: ${error.message || 'Something went wrong'}`,
+            "<br>"
+          ]);
         });
 
     

@@ -53,7 +53,7 @@ const helpObj = {
       "Sigme peopl play by the rules"
     ],
     [
-      "'challenges'",
+      "'challenge'",
       "Show your mental muscle"
     ],
     [
