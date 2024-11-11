@@ -1,7 +1,7 @@
-import command from '../config.json' assert {type: 'json'};
+import command from "../config.json" assert { type: "json" };
 import { HELP } from "./commands/help";
 import { BANNER } from "./commands/banner";
-import { ABOUT } from "./commands/about"
+import { ABOUT } from "./commands/about";
 import { DEFAULT } from "./commands/default";
 import { PROJECTS } from "./commands/projects";
 //import { createWhoami } from "./commands/whoami";
@@ -9,14 +9,13 @@ import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
 import { ACHIEVEMENTS } from "./commands/achievements";
 
-import { RULE } from './KurukshetraCommands/rules';
-
+import { RULE } from "./KurukshetraCommands/rules";
 
 //mutWriteLines gets deleted and reassigned
 let mutWriteLines = document.getElementById("write-lines");
-let historyIdx = 0
-let tempInput = ""
-let userInput : string;
+let historyIdx = 0;
+let tempInput = "";
+let userInput: string;
 let isSudo = false;
 let isPasswordInput = false;
 let isEmailInput = false;
@@ -39,7 +38,9 @@ const TERMINAL = document.getElementById("terminal");
 const USERINPUT = document.getElementById("user-input") as HTMLInputElement;
 const INPUT_HIDDEN = document.getElementById("input-hidden");
 const PASSWORD = document.getElementById("password-input");
-const PASSWORD_INPUT = document.getElementById("password-field") as HTMLInputElement;
+const PASSWORD_INPUT = document.getElementById(
+  "password-field"
+) as HTMLInputElement;
 const EMAIL = document.getElementById("email-input");
 const EMAIL_INPUT = document.getElementById("email-field") as HTMLInputElement;
 const KEY = document.getElementById("key-input");
@@ -49,7 +50,9 @@ const NAME_INPUT = document.getElementById("name-field") as HTMLInputElement;
 const TEAM = document.getElementById("team-input");
 const TEAM_INPUT = document.getElementById("team-field") as HTMLInputElement;
 const CHALLENGEID = document.getElementById("challengeid-input");
-const CHALLENGEID_INPUT = document.getElementById("challengeid-field") as HTMLInputElement;
+const CHALLENGEID_INPUT = document.getElementById(
+  "challengeid-field"
+) as HTMLInputElement;
 const TOKEN = document.getElementById("token-input");
 const TOKEN_INPUT = document.getElementById("token-field") as HTMLInputElement;
 const TID = document.getElementById("tid-input");
@@ -59,8 +62,22 @@ const PRE_USER = document.getElementById("pre-user");
 const HOST = document.getElementById("host");
 const USER = document.getElementById("user");
 const PROMPT = document.getElementById("prompt");
-const COMMANDS = ["register", "login", "team", "create-team", "join-team", "challenge", "submit", "leaderboard", "records", "about", "help", "rules", "verify"];
-const HISTORY : string[] = [];
+const COMMANDS = [
+  "register",
+  "login",
+  "team",
+  "create-team",
+  "join-team",
+  "challenge",
+  "submit",
+  "leaderboard",
+  "records",
+  "about",
+  "help",
+  "rules",
+  "verify",
+];
+const HISTORY: string[] = [];
 //const SUDO_PASSWORD = command.password;
 const GIT_LINK = command.gitLink;
 const LINKEDIN_LINK = command.linkedinLink;
@@ -71,69 +88,52 @@ const UNITY_LINK = command.unityLink;
 const DISCORD_LINK = command.discordLink;
 const EMAIL_LINK = command.emailLink;
 
-
 const scrollToBottom = () => {
   const MAIN = document.getElementById("main");
-  if(!MAIN) return
+  if (!MAIN) return;
 
   MAIN.scrollTop = MAIN.scrollHeight;
-}
+};
 
-function userInputHandler(e : KeyboardEvent) {
+function userInputHandler(e: KeyboardEvent) {
   const key = e.key;
 
-  switch(key) {
+  switch (key) {
     case "Enter":
       e.preventDefault();
       if (isEmailInput) {
-
         console.log("email handler is called");
-        
-        emailHandler();
-      }else if (isPasswordInput) {
 
+        emailHandler();
+      } else if (isPasswordInput) {
         console.log("pass handler is called");
 
         passwordHandler();
-        
       } else if (isKeyInput) {
         console.log("key handler is called");
 
         keyHandler();
-        
       } else if (isNameInput) {
-
         console.log("Name handler is called");
 
         nameHandler();
-        
       } else if (isTeamInput) {
-
         console.log("Name handler is called");
 
         teamHandler();
-        
       } else if (isTokenInput) {
-
         console.log("Name handler is called");
 
         tokenHandler();
-        
       } else if (isTidInput) {
-
         console.log("Name handler is called");
 
         tidHandler();
-        
       } else if (isChallengeidInput) {
-
         console.log("Name handler is called");
 
         challengeidHandler();
-        
-      }
-       else {
-
+      } else {
         console.log(" is called");
         enterKey();
       }
@@ -158,7 +158,7 @@ function userInputHandler(e : KeyboardEvent) {
 }
 
 function enterKey() {
-  if (!mutWriteLines || !PROMPT) return
+  if (!mutWriteLines || !PROMPT) return;
   const resetInput = "";
   let newUserInput;
   userInput = USERINPUT.value;
@@ -170,14 +170,14 @@ function enterKey() {
   }
 
   HISTORY.push(userInput);
-  historyIdx = HISTORY.length
+  historyIdx = HISTORY.length;
 
   //if clear then early return
-  if (userInput === 'clear') {
+  if (userInput === "clear") {
     commandHandler(userInput.toLowerCase().trim());
     USERINPUT.value = resetInput;
     userInput = resetInput;
-    return
+    return;
   }
 
   const div = document.createElement("div");
@@ -188,36 +188,36 @@ function enterKey() {
   }
 
   /*
-  if input is empty or a collection of spaces, 
+  if input is empty or a collection of spaces,
   just insert a prompt before #write-lines
   */
   if (userInput.trim().length !== 0) {
-      commandHandler(userInput.toLowerCase().trim());
-    }
-  
+    commandHandler(userInput.toLowerCase().trim());
+  }
+
   USERINPUT.value = resetInput;
-  userInput = resetInput; 
+  userInput = resetInput;
 }
 
 function tabKey() {
   let currInput = USERINPUT.value;
 
   for (const ele of COMMANDS) {
-    if(ele.startsWith(currInput)) {
+    if (ele.startsWith(currInput)) {
       USERINPUT.value = ele;
-      return
+      return;
     }
   }
 }
 
-function arrowKeys(e : string) {
-  switch(e){
-    case "ArrowDown":      
+function arrowKeys(e: string) {
+  switch (e) {
+    case "ArrowDown":
       if (historyIdx !== HISTORY.length) {
-          historyIdx += 1;
-          USERINPUT.value = HISTORY[historyIdx];
-          if (historyIdx === HISTORY.length) USERINPUT.value = tempInput;  
-      }      
+        historyIdx += 1;
+        USERINPUT.value = HISTORY[historyIdx];
+        if (historyIdx === HISTORY.length) USERINPUT.value = tempInput;
+      }
       break;
     case "ArrowUp":
       if (historyIdx === HISTORY.length) tempInput = USERINPUT.value;
@@ -229,14 +229,14 @@ function arrowKeys(e : string) {
   }
 }
 
-async function commandHandler(input : string) {
-  if(input.startsWith("rm -rf") && input.trim() !== "rm -rf") {
+async function commandHandler(input: string) {
+  if (input.startsWith("rm -rf") && input.trim() !== "rm -rf") {
     if (isSudo) {
-      if(input === "rm -rf src" && !bareMode) {
+      if (input === "rm -rf src" && !bareMode) {
         bareMode = true;
 
         setTimeout(() => {
-          if(!TERMINAL || !WRITELINESCOPY) return
+          if (!TERMINAL || !WRITELINESCOPY) return;
           TERMINAL.innerHTML = "";
           TERMINAL.appendChild(WRITELINESCOPY);
           mutWriteLines = WRITELINESCOPY;
@@ -245,138 +245,127 @@ async function commandHandler(input : string) {
         easterEggStyles();
         setTimeout(() => {
           writeLines(["What made you think that was a good idea?", "<br>"]);
-        }, 200)
+        }, 200);
 
         setTimeout(() => {
-          writeLines(["Now everything is ruined. (P.S : you succesfully hacked the website, send me this image and claim your respect)", "<br>"]);
-        }, 1200)
-
-        } else if (input === "rm -rf src" && bareMode) {
-          writeLines(["there's no more src folder.", "<br>"])
-        } else {
-          if(bareMode) {
-            writeLines(["What else are you trying to delete?", "<br>"])
-          } else {
-            writeLines(["<br>", "Directory not found.", "type <span class='command'>'ls'</span> for a list of directories.", "<br>"]);
-          }
-        } 
+          writeLines([
+            "Now everything is ruined. (P.S : you succesfully hacked the website, send me this image and claim your respect)",
+            "<br>",
+          ]);
+        }, 1200);
+      } else if (input === "rm -rf src" && bareMode) {
+        writeLines(["there's no more src folder.", "<br>"]);
       } else {
-        writeLines(["Permission not granted.", "<br>"]);
+        if (bareMode) {
+          writeLines(["What else are you trying to delete?", "<br>"]);
+        } else {
+          writeLines([
+            "<br>",
+            "Directory not found.",
+            "type <span class='command'>'ls'</span> for a list of directories.",
+            "<br>",
+          ]);
+        }
+      }
+    } else {
+      writeLines(["Permission not granted.", "<br>"]);
     }
-    return
+    return;
   }
   if (input.startsWith("p/")) {
-
     let i = 0;
 
-    for(const ele of command.projects.webdev){
-
-      if (ele[0] == input.slice(2) ) {
-
-        writeLines(createProject(ele))
-        
-      }
-      else{
-        i ++ ;
+    for (const ele of command.projects.webdev) {
+      if (ele[0] == input.slice(2)) {
+        writeLines(createProject(ele));
+      } else {
+        i++;
       }
     }
-    for(const ele of command.projects.flutterdev){
-
-      if (ele[0] == input.slice(2) ) {
-
-        writeLines(createProject(ele))
-        
-      }else{
-        i ++ ;
+    for (const ele of command.projects.flutterdev) {
+      if (ele[0] == input.slice(2)) {
+        writeLines(createProject(ele));
+      } else {
+        i++;
       }
-    
     }
-    for(const ele of command.projects.vrdev){
-
-      if (ele[0] == input.slice(2) ) {
-
-        writeLines(createProject(ele))
-        
-      }else{
-        i ++ ;
+    for (const ele of command.projects.vrdev) {
+      if (ele[0] == input.slice(2)) {
+        writeLines(createProject(ele));
+      } else {
+        i++;
       }
-    
     }
-    for(const ele of command.projects.cybersec){
-
-      if (ele[0] == input.slice(2) ) {
-
-        writeLines(createProject(ele))
-        
-      }else{
-        i ++ ;
+    for (const ele of command.projects.cybersec) {
+      if (ele[0] == input.slice(2)) {
+        writeLines(createProject(ele));
+      } else {
+        i++;
       }
-    
     }
-    for(const ele of command.projects.robotics){
-
-      if (ele[0] == input.slice(2) ) {
-
-        writeLines(createProject(ele))
-        
-      }else{
-        i ++ ;
+    for (const ele of command.projects.robotics) {
+      if (ele[0] == input.slice(2)) {
+        writeLines(createProject(ele));
+      } else {
+        i++;
       }
     }
     if (i >= 100) {
       writeLines(DEFAULT);
 
-      i=0;
+      i = 0;
     }
-    
   }
-  switch(input) {
-    
-    case 'clear':
+  switch (input) {
+    case "clear":
       setTimeout(() => {
-        if(!TERMINAL || !WRITELINESCOPY) return
+        if (!TERMINAL || !WRITELINESCOPY) return;
         TERMINAL.innerHTML = "";
         TERMINAL.appendChild(WRITELINESCOPY);
         mutWriteLines = WRITELINESCOPY;
-      })
+      });
       break;
-    case 'banner':
-      if(bareMode) {
-        writeLines(["WebShell v1.0.0", "<br>"])
+    case "banner":
+      if (bareMode) {
+        writeLines(["WebShell v1.0.0", "<br>"]);
         break;
       }
       writeLines(BANNER);
       break;
-    case 'help':
-      if(bareMode) {
-        writeLines(["maybe restarting your browser will fix this.", "<br>"])
+    case "help":
+      if (bareMode) {
+        writeLines(["maybe restarting your browser will fix this.", "<br>"]);
         break;
       }
       writeLines(HELP);
       break;
-    case 'challenge':      
-      
+    case "challenge":
       if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        writeLines([`${command.username}`, "<br>"]);
         break;
       }
-      
+
       try {
-        const response = await fetch('https://api.chakravyuh.live/challenges/me/todo', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
+        const response = await fetch(
+          "https://api.chakravyuh.live/challenges/me/todo",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        });
-        
+        );
+
         if (!response.ok) {
           const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Unknown error"}`
+          );
         }
-        
+
         const challengeData = await response.json();
-        
+
         writeLines([
           `Challenge no. : ${challengeData.no}`,
           "<br>",
@@ -384,68 +373,73 @@ async function commandHandler(input : string) {
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Summary: ${challengeData.summary}</div>`,
           "<br>",
-          `Tags: ${challengeData.tags.join(', ')}`,
+          `Tags: ${challengeData.tags.join(", ")}`,
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
           "<br>",
-          `${challengeData.hints.length > 0 ? `Hints: ${challengeData.hints.map((hint, index) => `${index + 1}. ${hint.text}`).join('; ')}` : ''}`,
+          `${
+            challengeData.hints.length > 0
+              ? `Hints: ${challengeData.hints
+                  .map(
+                    (hint: any, index: number) => `${index + 1}. ${hint.text}`
+                  )
+                  .join("; ")}`
+              : ""
+          }`,
         ]);
-      }catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+      } catch (error: unknown) {
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
       break;
 
-      case 'records':      
-      
+    case "records":
       if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        writeLines([`${command.username}`, "<br>"]);
         break;
       }
-      
+
       try {
-        const response = await fetch('https://api.chakravyuh.live/challenges/me/done', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
+        const response = await fetch(
+          "https://api.chakravyuh.live/challenges/me/done",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-        });
-        
+        );
+
         const data = await response.json();
-        
+
         if (!response.ok) {
           throw {
             ...data,
-            status: response.status
+            status: response.status,
           };
         }
 
         if (data.length === 0) {
-          writeLines([
-            "No challenges completed yet.",
-            "<br>"
-          ]);
+          writeLines(["No challenges completed yet.", "<br>"]);
           break;
         }
-        
-        writeLines([
-          "Completed Challenges:",
-          "<br>"
-        ]);
+
+        writeLines(["Completed Challenges:", "<br>"]);
 
         // Loop through each challenge in the array
         data.forEach((challenge: any) => {
@@ -455,239 +449,225 @@ async function commandHandler(input : string) {
             "<br>",
             `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%; margin-left: 10px;">Summary: ${challenge.summary}</div>`,
             "<br>",
-            `Tags: ${challenge.tags.join(', ')}`,
+            `Tags: ${challenge.tags.join(", ")}`,
             "<br>",
             "<br>",
-            `</div>`
+            `</div>`,
           ]);
         });
-
       } catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
       break;
 
-      case 'leaderboard':      
-      
-        if (bareMode) {
-          writeLines([`${command.username}`, "<br>"])
-          break;
-        }
-      
-       try {
-        const response = await fetch('https://api.chakravyuh.live/teams/leaderboard', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-         'Content-Type': 'application/json'
-        }
-        });
-  
-         const data = await response.json();
+    case "leaderboard":
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"]);
+        break;
+      }
 
-                if (!response.ok) {
-            throw {
-              ...data,
-              status: response.status
-                  };
+      try {
+        const response = await fetch(
+          "https://api.chakravyuh.live/teams/leaderboard",
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw {
+            ...data,
+            status: response.status,
+          };
         }
 
         if (!Array.isArray(data) || data.length === 0) {
-         writeLines([
-          "No teams on leaderboard yet.",
-          "<br>"
-        ]);
-         break;
+          writeLines(["No teams on leaderboard yet.", "<br>"]);
+          break;
         }
 
-              // Create an array to store all lines
-            const allLines = [
-           "Leaderboard:",
-         "<br>",
-          "<br>"
-          ];
+        // Create an array to store all lines
+        const allLines = ["Leaderboard:", "<br>", "<br>"];
 
-         // Add each team's information to the lines array
-          data.forEach((team: any, index: number) => {
-        allLines.push(
-          `<div style="margin-left: 10px; margin-bottom: 10px;">`,
-          `#${index + 1}. Team ${team.name}`,
-          "<br>",
+        // Add each team's information to the lines array
+        data.forEach((team: any, index: number) => {
+          allLines.push(
+            `<div style="margin-left: 10px; margin-bottom: 10px;">`,
+            `#${index + 1}. Team ${team.name}`,
+            "<br>",
             `<div style="margin-left: 20px;">`,
-          `Score: ${team.score}`,
-          "<br>",
-          `Captain: ${team.lead?.fullName || 'Unknown'}`,
-         "<br>",
-          `</div>`,
-          `</div>`
-         );
-           });
-
-          // Make a single writeLines call with all the content
-                writeLines(allLines);
-
-          } catch (error: unknown) {
-          console.error('Error:', error);
-  
-          if (error && typeof error === 'object' && 'message' in error) {
-                const apiError = error as { message: string; error?: string; statusCode?: number; };
-         writeLines([
-           `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-         "<br>"
-          ]);
-          } else {
-           writeLines([
-              "An unexpected error occurred",
-              "<br>"
-          ]);
-              }
-          }
-
-        break;
-      case 'test':      
-      
-      if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
-        break;
-      }
-      
-      try {
-        const response = await fetch('https://api.chakravyuh.live/', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          }
+            `Score: ${team.score}`,
+            "<br>",
+            `Captain: ${team.lead?.fullName || "Unknown"}`,
+            "<br>",
+            `</div>`,
+            `</div>`
+          );
         });
-        
-        if (!response.ok) {
-          const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
-        }
-        
-        
-        
-        
+
+        // Make a single writeLines call with all the content
+        writeLines(allLines);
       } catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
-      break;
 
-      case 'send-mail':      
-      
+      break;
+    case "test":
       if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        writeLines([`${command.username}`, "<br>"]);
         break;
       }
-      
+
       try {
-        const response = await fetch('https://api.chakravyuh.live/auth/verify-email/init', {
-          method: 'POST',
-          credentials: 'include',
+        const response = await fetch("https://api.chakravyuh.live/", {
+          method: "GET",
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            
-            
-            
-          })
         });
-        
+
         if (!response.ok) {
           const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
-        }else{
-
-          writeLines([
-            "Mail sent !!",
-            "<br>"
-          ]);
-
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Unknown error"}`
+          );
         }
-        
-        
-        
-        
       } catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
       break;
 
-      case 'team':      
-      
+    case "send-mail":
       if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        writeLines([`${command.username}`, "<br>"]);
         break;
       }
-      
+
       try {
-        const response = await fetch('https://api.chakravyuh.live/teams/my', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
+        const response = await fetch(
+          "https://api.chakravyuh.live/auth/verify-email/init",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
           }
-        });
-        
+        );
+
         if (!response.ok) {
           const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Unknown error"}`
+          );
+        } else {
+          writeLines(["Mail sent !!", "<br>"]);
         }
-        
+      } catch (error: unknown) {
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
+          writeLines([
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
+          ]);
+        } else {
+          writeLines(["An unexpected error occurred", "<br>"]);
+        }
+      }
+      break;
+
+    case "team":
+      if (bareMode) {
+        writeLines([`${command.username}`, "<br>"]);
+        break;
+      }
+
+      try {
+        const response = await fetch("https://api.chakravyuh.live/teams/my", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Unknown error"}`
+          );
+        }
+
         const teamData = await response.json();
-        
+
         writeLines([
           `Team name: ${teamData.name}`,
           `Team score: ${teamData.score}`,
           `Team UG: ${teamData.ug}`,
           `Team join code: ${teamData.joinCode}`,
           `Team lead name: ${teamData.lead.fullName}`,
-          
-          "<br>"
+
+          "<br>",
         ]);
         // teamData.forEach((team: any, index: number) => {
         //   allLines.push(
@@ -703,213 +683,214 @@ async function commandHandler(input : string) {
         //     `</div>`
         //   );
       } catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
       break;
 
-
-      case 'me':      
-      
+    case "me":
       if (bareMode) {
-        writeLines([`${command.username}`, "<br>"])
+        writeLines([`${command.username}`, "<br>"]);
         break;
       }
-      
+
       try {
-        const response = await fetch('https://api.chakravyuh.live/auth/me', {
-          method: 'GET',
-          credentials: 'include',
+        const response = await fetch("https://api.chakravyuh.live/auth/me", {
+          method: "GET",
+          credentials: "include",
           headers: {
-            'Content-Type': 'application/json'
-          }
+            "Content-Type": "application/json",
+          },
         });
-        
+
         if (!response.ok) {
           const errorBody = await response.json();
-          throw new Error(`${response.status}: ${errorBody.message || 'Unknown error'}`);
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Unknown error"}`
+          );
         }
 
-      const data = await response.json();
-        
+        const data = await response.json();
+
         writeLines([
           `Name: ${data.fullName}`,
           `Email: ${data.email}`,
           `UG: ${data.ug}`,
           // `Team join code: ${data.joinCode}`,
           // `Team lead name: ${data.lead.fullName}`,
-          
-          "<br>"
+
+          "<br>",
         ]);
-        
-        
-      }catch (error: unknown) {
-        console.error('Error:', error);
-        
-        if (error && typeof error === 'object' && 'message' in error) {
-          const apiError = error as { message: string; error?: string; statusCode?: number; };
+      } catch (error: unknown) {
+        console.error("Error:", error);
+
+        if (error && typeof error === "object" && "message" in error) {
+          const apiError = error as {
+            message: string;
+            error?: string;
+            statusCode?: number;
+          };
           writeLines([
-            `Error ${apiError.statusCode || ''}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : '',
-            "<br>"
+            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+            apiError.error ? `(${apiError.error})` : "",
+            "<br>",
           ]);
         } else {
-          writeLines([
-            "An unexpected error occurred",
-            "<br>"
-          ]);
+          writeLines(["An unexpected error occurred", "<br>"]);
         }
       }
       break;
 
-    case 'about':
-      if(bareMode) {
-        writeLines(["Nothing to see here.", "<br>"])
+    case "about":
+      if (bareMode) {
+        writeLines(["Nothing to see here.", "<br>"]);
         break;
       }
       writeLines(ABOUT);
       break;
-    case 'rules':
-      if(bareMode) {
-        writeLines(["Nothing to see here.", "<br>"])
+    case "rules":
+      if (bareMode) {
+        writeLines(["Nothing to see here.", "<br>"]);
         break;
       }
       writeLines(RULE);
       break;
-    
-    
-    case 'projects':
-      if(bareMode) {
-        writeLines(["I don't want you to break the other projects.", "<br>"])
+
+    case "projects":
+      if (bareMode) {
+        writeLines(["I don't want you to break the other projects.", "<br>"]);
         break;
       }
       writeLines(PROJECTS);
       break;
-    case 'achievements':
-      if(bareMode) {
-        writeLines(["I don't want you to break the other things.", "<br>"])
+    case "achievements":
+      if (bareMode) {
+        writeLines(["I don't want you to break the other things.", "<br>"]);
         break;
       }
       writeLines(ACHIEVEMENTS);
       break;
-    case 's/github':
+    case "s/github":
       writeLines(["Redirecting to github.com...", "<br>"]);
       setTimeout(() => {
-        window.open( GIT_LINK, '_blank');
+        window.open(GIT_LINK, "_blank");
       }, 500);
       break;
-      case 'hackme':
-      if(bareMode) {
-        writeLines(["Nothing to see here.", "<br>"])
+    case "hackme":
+      if (bareMode) {
+        writeLines(["Nothing to see here.", "<br>"]);
         break;
       }
       writeLines(Hackme);
       break;
-      case 'neko':
-      if(bareMode) {
-        writeLines(["Nothing to see here.", "<br>"])
+    case "neko":
+      if (bareMode) {
+        writeLines(["Nothing to see here.", "<br>"]);
         break;
       }
       writeLines(Neko);
       break;
-    case 's/linkedin':
+    case "s/linkedin":
       writeLines(["Redirecting to linkedin...", "<br>"]);
       setTimeout(() => {
-        window.open( LINKEDIN_LINK, '_blank');
+        window.open(LINKEDIN_LINK, "_blank");
       }, 500);
-     break;
-    case 's/discord':
+      break;
+    case "s/discord":
       writeLines(["Redirecting to discord...", "<br>"]);
       setTimeout(() => {
-        window.open( DISCORD_LINK, '_blank');
+        window.open(DISCORD_LINK, "_blank");
       }, 500);
-     break;
-    case 's/instagram':
+      break;
+    case "s/instagram":
       writeLines(["Redirecting to instagram...", "<br>"]);
       setTimeout(() => {
-        window.open( INSTAGRAM_LINK, '_blank');
+        window.open(INSTAGRAM_LINK, "_blank");
       }, 500);
-     break;
-    case 's/gcloud':
+      break;
+    case "s/gcloud":
       writeLines(["Redirecting to google cloud profile...", "<br>"]);
       setTimeout(() => {
-        window.open( GCLOUD_LINK, '_blank');
+        window.open(GCLOUD_LINK, "_blank");
       }, 500);
-     break;
-    case 's/gdeveloper':
+      break;
+    case "s/gdeveloper":
       writeLines(["Redirecting to google developer profile...", "<br>"]);
       setTimeout(() => {
-        window.open( GPROFILE_LINK, '_blank');
+        window.open(GPROFILE_LINK, "_blank");
       }, 500);
-     break;
-    case 's/unity':
+      break;
+    case "s/unity":
       writeLines(["Redirecting to unity learn profile...", "<br>"]);
       setTimeout(() => {
-        window.open( UNITY_LINK, '_blank');
+        window.open(UNITY_LINK, "_blank");
       }, 500);
       break;
-    
-    case 's/email':
+
+    case "s/email":
       writeLines(["Redirecting to email...", "<br>"]);
       setTimeout(() => {
-        window.open( EMAIL_LINK, '_blank');
+        window.open(EMAIL_LINK, "_blank");
       }, 500);
       break;
-      
-    
-    case 'rm -rf':
+
+    case "rm -rf":
       if (bareMode) {
-        writeLines(["don't try again.", "<br>"])
+        writeLines(["don't try again.", "<br>"]);
         break;
       }
 
       if (isSudo) {
-        writeLines(["Usage: <span class='command'>'rm -rf &lt;dir&gt;'</span>", "<br>"]);
+        writeLines([
+          "Usage: <span class='command'>'rm -rf &lt;dir&gt;'</span>",
+          "<br>",
+        ]);
       } else {
-        writeLines(["Permission not granted.", "<br>"])
+        writeLines(["Permission not granted.", "<br>"]);
       }
-        break;
+      break;
 
-    case 'register':
-      if(bareMode) {
-        writeLines(["no.", "<br>"])
+    case "register":
+      if (bareMode) {
+        writeLines(["no.", "<br>"]);
         break;
       }
-      if(!EMAIL) return
+      if (!EMAIL) return;
       isEmailInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       EMAIL.style.display = "block";
       setTimeout(() => {
         EMAIL_INPUT.focus();
       }, 100);
 
       break;
-    case 'login':
-      if(bareMode) {
-        writeLines(["no.", "<br>"])
+    case "login":
+      if (bareMode) {
+        writeLines(["no.", "<br>"]);
         break;
       }
       islogin = 1;
-      if(!EMAIL) return
+      if (!EMAIL) return;
       isEmailInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       EMAIL.style.display = "block";
       setTimeout(() => {
         EMAIL_INPUT.focus();
@@ -917,13 +898,12 @@ async function commandHandler(input : string) {
 
       break;
 
-      case 'create-team':
-
-      if(!TEAM) return
+    case "create-team":
+      if (!TEAM) return;
       isTeamInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       TEAM.style.display = "block";
       setTimeout(() => {
         TEAM_INPUT.focus();
@@ -931,13 +911,12 @@ async function commandHandler(input : string) {
 
       break;
 
-      case 'verify':
-
-      if(!TOKEN) return
+    case "verify":
+      if (!TOKEN) return;
       isTokenInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       TOKEN.style.display = "block";
       setTimeout(() => {
         TOKEN_INPUT.focus();
@@ -945,13 +924,12 @@ async function commandHandler(input : string) {
 
       break;
 
-      case 'submit':
-
-      if(!CHALLENGEID) return
+    case "submit":
+      if (!CHALLENGEID) return;
       isChallengeidInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       CHALLENGEID.style.display = "block";
       setTimeout(() => {
         CHALLENGEID_INPUT.focus();
@@ -959,13 +937,12 @@ async function commandHandler(input : string) {
 
       break;
 
-      case 'join-team':
-
-      if(!TID) return
+    case "join-team":
+      if (!TID) return;
       isTidInput = true;
       USERINPUT.disabled = true;
 
-      if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
       TID.style.display = "block";
       setTimeout(() => {
         TID_INPUT.focus();
@@ -973,62 +950,59 @@ async function commandHandler(input : string) {
 
       break;
 
-      case 'logout':
-        try {
-                const response = await fetch('https://api.chakravyuh.live/auth/logout', {
-                  method: 'DELETE',
-                  credentials: 'include',
-                  headers: {
-                      'Content-Type': 'application/json'
-                    }
-                });
-    
-          if (!response.ok) {
-         const errorBody = await response.json();
-            throw new Error(`${response.status}: ${errorBody.message || 'Logout failed'}`);
+    case "logout":
+      try {
+        const response = await fetch(
+          "https://api.chakravyuh.live/auth/logout",
+          {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-    
-             writeLines([
-           "Successfully logged out!",
-          "<br>"
-          ]);
-          } catch (error: unknown) {
-          let errorMessage = 'Error during logout';
-    
-          if (error instanceof Error) {
-          errorMessage = error.message;
-          }
-    
-          writeLines([
-          `Error: ${errorMessage}`,
-            "<br>"
-            ]);
-            }
-          break;
+        );
 
-
-    case 'sudo':
-        if(bareMode) {
-          writeLines(["no.", "<br>"])
-          break;
+        if (!response.ok) {
+          const errorBody = await response.json();
+          throw new Error(
+            `${response.status}: ${errorBody.message || "Logout failed"}`
+          );
         }
-        if(!PASSWORD) return
-        isPasswordInput = true;
-        USERINPUT.disabled = true;
-  
-        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-        PASSWORD.style.display = "block";
-        setTimeout(() => {
-          PASSWORD_INPUT.focus();
-        }, 100);
-  
-        break;
-    case 'p/insiiits':
-      
+
+        writeLines(["Successfully logged out!", "<br>"]);
+      } catch (error: unknown) {
+        let errorMessage = "Error during logout";
+
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+
+        writeLines([`Error: ${errorMessage}`, "<br>"]);
+      }
       break;
-    case 'ls':
-      if(bareMode) {
-        writeLines(["", "<br>"])
+
+    case "sudo":
+      if (bareMode) {
+        writeLines(["no.", "<br>"]);
+        break;
+      }
+      if (!PASSWORD) return;
+      isPasswordInput = true;
+      USERINPUT.disabled = true;
+
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      PASSWORD.style.display = "block";
+      setTimeout(() => {
+        PASSWORD_INPUT.focus();
+      }, 100);
+
+      break;
+    case "p/insiiits":
+      break;
+    case "ls":
+      if (bareMode) {
+        writeLines(["", "<br>"]);
         break;
       }
 
@@ -1042,25 +1016,25 @@ async function commandHandler(input : string) {
       if (input.startsWith("p/")) {
         break;
       }
-      if(bareMode) {
-        writeLines(["type 'help'", "<br>"])
+      if (bareMode) {
+        writeLines(["type 'help'", "<br>"]);
         break;
       }
 
       writeLines(DEFAULT);
       break;
-  }  
+  }
 }
 
-function writeLines(message : string[]) {
+function writeLines(message: string[]) {
   message.forEach((item, idx) => {
     displayText(item, idx);
   });
 }
 
-function displayText(item : string, idx : number) {
+function displayText(item: string, idx: number) {
   setTimeout(() => {
-    if(!mutWriteLines) return
+    if (!mutWriteLines) return;
     const p = document.createElement("p");
     p.innerHTML = item;
     mutWriteLines.parentNode!.insertBefore(p, mutWriteLines);
@@ -1068,62 +1042,58 @@ function displayText(item : string, idx : number) {
   }, 40 * idx);
 }
 
-const createProject = (ele: string[]) : string[] => {
+const createProject = (ele: string[]): string[] => {
+  const project: string[] = [];
 
-  const project : string[] = [];
-
-  project.push("<br>")
+  project.push("<br>");
   let string = "";
   const SPACE = "&nbsp;";
-  
+
   string += "---><span class='name'>";
   string += ele[11];
   string += "</span>";
   string += SPACE.repeat(16 - ele[0].length);
-  
-  project.push(string)
-  project.push("<br>")
-  
-  project.push(ele[1])
-  project.push("<br>")
-  project.push(ele[2])
-  project.push(ele[3])
-  project.push(ele[9])
-  project.push(ele[10])
-  project.push("<br>")
 
-  project.push(ele[4])
-  project.push(ele[5])
-  project.push(ele[6])
-  project.push(ele[7])
-  project.push(ele[8])
-  project.push("<br>")
+  project.push(string);
+  project.push("<br>");
 
-  project.push(ele[14])
-  project.push(ele[15])
-  project.push(ele[16])
+  project.push(ele[1]);
+  project.push("<br>");
+  project.push(ele[2]);
+  project.push(ele[3]);
+  project.push(ele[9]);
+  project.push(ele[10]);
+  project.push("<br>");
 
+  project.push(ele[4]);
+  project.push(ele[5]);
+  project.push(ele[6]);
+  project.push(ele[7]);
+  project.push(ele[8]);
+  project.push("<br>");
 
+  project.push(ele[14]);
+  project.push(ele[15]);
+  project.push(ele[16]);
 
-  return project
-}
-
+  return project;
+};
 
 function revertPasswordChanges() {
-    if (!INPUT_HIDDEN || !PASSWORD) return
-    PASSWORD_INPUT.value = "";
-    USERINPUT.disabled = false;
-    INPUT_HIDDEN.style.display = "block";
-    PASSWORD.style.display = "none";
-    isPasswordInput = false;
+  if (!INPUT_HIDDEN || !PASSWORD) return;
+  PASSWORD_INPUT.value = "";
+  USERINPUT.disabled = false;
+  INPUT_HIDDEN.style.display = "block";
+  PASSWORD.style.display = "none";
+  isPasswordInput = false;
 
-    setTimeout(() => {
-      USERINPUT.focus();
-    }, 200)
+  setTimeout(() => {
+    USERINPUT.focus();
+  }, 200);
 }
 
 function revertEmailChanges() {
-  if (!INPUT_HIDDEN || !EMAIL) return
+  if (!INPUT_HIDDEN || !EMAIL) return;
   EMAIL_INPUT.value = "";
   USERINPUT.disabled = false;
   INPUT_HIDDEN.style.display = "block";
@@ -1132,7 +1102,7 @@ function revertEmailChanges() {
 
   setTimeout(() => {
     USERINPUT.focus();
-  }, 200)
+  }, 200);
 }
 
 // function revertKeyChanges() {
@@ -1149,7 +1119,7 @@ function revertEmailChanges() {
 // }
 
 function revertNameChanges() {
-  if (!INPUT_HIDDEN || !NAME) return
+  if (!INPUT_HIDDEN || !NAME) return;
   NAME_INPUT.value = "";
   USERINPUT.disabled = false;
   INPUT_HIDDEN.style.display = "block";
@@ -1158,143 +1128,145 @@ function revertNameChanges() {
 
   setTimeout(() => {
     USERINPUT.focus();
-  }, 200)
+  }, 200);
 }
 
 function passwordHandler() {
   if (passwordCounter === 2) {
-    if (!INPUT_HIDDEN || !mutWriteLines || !PASSWORD) return
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    if (!INPUT_HIDDEN || !mutWriteLines || !PASSWORD) return;
+    writeLines([
+      "<br>",
+      "INCORRECT PASSWORD.",
+      "PERMISSION NOT GRANTED.",
+      "<br>",
+    ]);
     revertPasswordChanges();
     passwordCounter = 0;
-    return
+    return;
   }
 
   if (PASSWORD_INPUT.value) {
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
-    
-    
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
     if (islogin == 1) {
-
       console.log(EMAIL_INPUT.value);
       console.log(PASSWORD_INPUT.value);
 
-      fetch('https://api.chakravyuh.live/auth/login', {
-        method: 'POST',
-       
-        //credentials: 'include', 
+      fetch("https://api.chakravyuh.live/auth/login", {
+        method: "POST",
+
+        //credentials: 'include',
         headers: {
-            'Content-Type': 'application/json',
-            //'Accept': 'application/json'
+          "Content-Type": "application/json",
+          //'Accept': 'application/json'
         },
         body: JSON.stringify({
-            email: EMAIL_INPUT.value,
-            password: PASSWORD_INPUT.value
-        })
-    })
-    .then(async response => {
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // If response is not ok, throw the error data
-        throw data;
-      }
-      
-      console.log('Success:', data);
-      writeLines(["<br>", "Logged in! Start Hacking", "Try <span class='command'>'challenge'</span>", "<br>"]);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      // Display the error message from the API
-      writeLines([
-        "<br>",
-        `Error: ${error.message || 'Something went wrong'}`,
-        "<br>"
-      ]);
-    });
-
-    }else {
-
-      console.log(EMAIL_INPUT.value);
-      console.log(PASSWORD_INPUT.value);
-      console.log(NAME_INPUT.value);
-
-      fetch('https://api.chakravyuh.live/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: EMAIL_INPUT.value,
-                password: PASSWORD_INPUT.value,
-                fullName: NAME_INPUT.value
-            })
-        })
-        .then(async response => {
+          email: EMAIL_INPUT.value,
+          password: PASSWORD_INPUT.value,
+        }),
+      })
+        .then(async (response) => {
           const data = await response.json();
-          
+
           if (!response.ok) {
             // If response is not ok, throw the error data
             throw data;
           }
-          
-          console.log('Success:', data);
-          writeLines(["<br>", "Registered, now use the verify command", "Try <span class='command'>'verify'</span>", "<br>"]);
+
+          console.log("Success:", data);
+          writeLines([
+            "<br>",
+            "Logged in! Start Hacking",
+            "Try <span class='command'>'challenge'</span>",
+            "<br>",
+          ]);
         })
         .catch((error) => {
-          console.error('Error:', error);
+          console.error("Error:", error);
           // Display the error message from the API
           writeLines([
             "<br>",
-            `Error: ${error.message || 'Something went wrong'}`,
-            "<br>"
+            `Error: ${error.message || "Something went wrong"}`,
+            "<br>",
+          ]);
+        });
+    } else {
+      console.log(EMAIL_INPUT.value);
+      console.log(PASSWORD_INPUT.value);
+      console.log(NAME_INPUT.value);
+
+      fetch("https://api.chakravyuh.live/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: EMAIL_INPUT.value,
+          password: PASSWORD_INPUT.value,
+          fullName: NAME_INPUT.value,
+        }),
+      })
+        .then(async (response) => {
+          const data = await response.json();
+
+          if (!response.ok) {
+            // If response is not ok, throw the error data
+            throw data;
+          }
+
+          console.log("Success:", data);
+          writeLines([
+            "<br>",
+            "Registered, now use the verify command",
+            "Try <span class='command'>'verify'</span>",
+            "<br>",
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Display the error message from the API
+          writeLines([
+            "<br>",
+            `Error: ${error.message || "Something went wrong"}`,
+            "<br>",
           ]);
         });
 
-        // fetch('https://api.chakravyuh.live/auth/verify-email/init', {
-        //   method: 'POST',
-        //   headers: {
-        //       'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //       frontendBase : "https://abhijit.com",
-              
-        //   })
-        // })
-        // .then(async response => {
-        //   const data = await response.json();
-          
-        //   if (!response.ok) {
-        //     // If response is not ok, throw the error data
-        //     throw data;
-        //   }
-          
-        //   console.log('Success:', data);
-        //   writeLines(["<br>", "Registered, now use the verify command", "Try <span class='command'>'verify'</span>", "<br>"]);
-        // })
-        // .catch((error) => {
-        //   console.error('Error:', error);
-        //   // Display the error message from the API
-        //   writeLines([
-        //     "<br>",
-        //     `Error: ${error.message || 'Something went wrong'}`,
-        //     "<br>"
-        //   ]);
-        // });
+      // fetch('https://api.chakravyuh.live/auth/verify-email/init', {
+      //   method: 'POST',
+      //   headers: {
+      //       'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({
+      //       frontendBase : "https://abhijit.com",
 
-      
+      //   })
+      // })
+      // .then(async response => {
+      //   const data = await response.json();
 
+      //   if (!response.ok) {
+      //     // If response is not ok, throw the error data
+      //     throw data;
+      //   }
 
-
+      //   console.log('Success:', data);
+      //   writeLines(["<br>", "Registered, now use the verify command", "Try <span class='command'>'verify'</span>", "<br>"]);
+      // })
+      // .catch((error) => {
+      //   console.error('Error:', error);
+      //   // Display the error message from the API
+      //   writeLines([
+      //     "<br>",
+      //     `Error: ${error.message || 'Something went wrong'}`,
+      //     "<br>"
+      //   ]);
+      // });
     }
-
-    
-
 
     revertPasswordChanges();
     //isSudo = true;
-    return
+    return;
   } else {
     PASSWORD_INPUT.value = "";
     passwordCounter++;
@@ -1304,7 +1276,12 @@ function passwordHandler() {
 function emailHandler() {
   if (emailCounter === 2) {
     if (!INPUT_HIDDEN || !mutWriteLines || !EMAIL) return;
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"]);
+    writeLines([
+      "<br>",
+      "INCORRECT PASSWORD.",
+      "PERMISSION NOT GRANTED.",
+      "<br>",
+    ]);
     revertEmailChanges();
     emailCounter = 0;
     return;
@@ -1315,72 +1292,58 @@ function emailHandler() {
   // Validate email format
   const emailRegex = /^(\w+)\.(\w+)(\d+)@iiits\.in$/;
   if (emailRegex.test(emailInput)) {
-
-    if (!INPUT_HIDDEN || !EMAIL) return
+    if (!INPUT_HIDDEN || !EMAIL) return;
     //EMAIL_INPUT.value = "";
     USERINPUT.disabled = false;
     INPUT_HIDDEN.style.display = "block";
     EMAIL.style.display = "none";
     isEmailInput = false;
 
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
+
+    if (islogin == 1) {
+      if (!PASSWORD) return;
+      isPasswordInput = true;
+      USERINPUT.disabled = true;
+
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      PASSWORD.style.display = "block";
       setTimeout(() => {
-        USERINPUT.focus();
-      }, 200)
+        PASSWORD_INPUT.focus();
+      }, 100);
+    } else {
+      if (!NAME) return;
+      isNameInput = true;
+      USERINPUT.disabled = true;
 
-
-      if (islogin == 1) {
-
-        if(!PASSWORD) return
-        isPasswordInput = true;
-        USERINPUT.disabled = true;
-  
-        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-        PASSWORD.style.display = "block";
-        setTimeout(() => {
-          PASSWORD_INPUT.focus();
-        }, 100);
-
-        
-        
-      } else {
-
-        if(!NAME) return
-        isNameInput = true;
-        USERINPUT.disabled = true;
-  
-        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-        NAME.style.display = "block";
-        setTimeout(() => {
-          NAME_INPUT.focus();
-        }, 100);
-
-        
-
-
-      }
-
+      if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+      NAME.style.display = "block";
+      setTimeout(() => {
+        NAME_INPUT.focus();
+      }, 100);
+    }
 
     // if(!PASSWORD) return
     //     isPasswordInput = true;
     //     USERINPUT.disabled = true;
-  
+
     //     if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
     //     PASSWORD.style.display = "block";
     //     setTimeout(() => {
     //       PASSWORD_INPUT.focus();
     //     }, 100);
-
-
-    
-  }else {
-
-
-    writeLines(["<br>", "INVALID EMAIL FORMAT.", "Email should be in the format: name.lastnamenumber@iiits.in", "<br>"]);
+  } else {
+    writeLines([
+      "<br>",
+      "INVALID EMAIL FORMAT.",
+      "Email should be in the format: name.lastnamenumber@iiits.in",
+      "<br>",
+    ]);
     EMAIL_INPUT.value = "";
     emailCounter++;
     return;
-
-
   }
 
   // if (emailInput === SUDO_PASSWORD) {
@@ -1395,64 +1358,62 @@ function emailHandler() {
   // }
 }
 function keyHandler() {
-  
-
   if (KEY_INPUT.value) {
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!INPUT_HIDDEN || !KEY) return
+    if (!INPUT_HIDDEN || !KEY) return;
 
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    KEY.style.display = "none";
+    isKeyInput = false;
 
-      USERINPUT.disabled = false;
-      INPUT_HIDDEN.style.display = "block";
-      KEY.style.display = "none";
-      isKeyInput = false;
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
 
-        setTimeout(() => {
-          USERINPUT.focus();
-        }, 200)
-
-
-    fetch('https://api.chakravyuh.live/challenges/submit', {
-      method: 'POST',
-      credentials: 'include',
-       headers: {
-        'Content-Type': 'application/json', 
+    fetch("https://api.chakravyuh.live/challenges/submit", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
         // 'Cookie': cookie
-        },
+      },
       body: JSON.stringify({
         challengeNo: +CHALLENGEID_INPUT.value,
-        flag: KEY_INPUT.value
-        
+        flag: KEY_INPUT.value,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
+
+        if (!response.ok) {
+          // If response is not ok, throw the error data
+          throw data;
+        }
+
+        console.log("Success:", data);
+        writeLines([
+          "<br>",
+          "Good work!!",
+          "Try <span class='command'>'challenge'</span>",
+          "<br>",
+        ]);
       })
-    })
-    .then(async response => {
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // If response is not ok, throw the error data
-        throw data;
-      }
-      
-      console.log('Success:', data);
-      writeLines(["<br>", "Good work!!", "Try <span class='command'>'challenge'</span>", "<br>"]);
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      // Display the error message from the API
-      writeLines([
-        "<br>",
-        `Error: ${error.message || 'Something went wrong'}`,
-        "<br>"
-      ]);
-    });
+      .catch((error) => {
+        console.error("Error:", error);
+        // Display the error message from the API
+        writeLines([
+          "<br>",
+          `Error: ${error.message || "Something went wrong"}`,
+          "<br>",
+        ]);
+      });
 
-      KEY_INPUT.value = "";
-      CHALLENGEID_INPUT.value = "";
-    
+    KEY_INPUT.value = "";
+    CHALLENGEID_INPUT.value = "";
 
-
-    return
+    return;
   } else {
     KEY_INPUT.value = "";
     passwordCounter++;
@@ -1460,46 +1421,47 @@ function keyHandler() {
 }
 
 function nameHandler() {
-
   console.log("Name handler is called");
   if (nameCounter === 2) {
-    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return;
+    writeLines([
+      "<br>",
+      "INCORRECT PASSWORD.",
+      "PERMISSION NOT GRANTED.",
+      "<br>",
+    ]);
     revertNameChanges();
     //keyCounter = 0;
-    return
+    return;
   }
 
   if (NAME_INPUT.value) {
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!INPUT_HIDDEN || !NAME) return
-
+    if (!INPUT_HIDDEN || !NAME) return;
 
     USERINPUT.disabled = false;
     INPUT_HIDDEN.style.display = "block";
     NAME.style.display = "none";
     isNameInput = false;
 
-      setTimeout(() => {
-        USERINPUT.focus();
-      }, 200)
-    
-    
-    if(!PASSWORD) return
-        isPasswordInput = true;
-        USERINPUT.disabled = true;
-  
-        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-        PASSWORD.style.display = "block";
-        setTimeout(() => {
-          PASSWORD_INPUT.focus();
-        }, 100);
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
+
+    if (!PASSWORD) return;
+    isPasswordInput = true;
+    USERINPUT.disabled = true;
+
+    if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+    PASSWORD.style.display = "block";
+    setTimeout(() => {
+      PASSWORD_INPUT.focus();
+    }, 100);
 
     // writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
 
-
-    return
+    return;
   } else {
     NAME_INPUT.value = "";
     nameCounter++;
@@ -1507,144 +1469,148 @@ function nameHandler() {
 }
 
 function teamHandler() {
-
   console.log("Name handler is called");
   if (nameCounter === 2) {
-    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return;
+    writeLines([
+      "<br>",
+      "INCORRECT PASSWORD.",
+      "PERMISSION NOT GRANTED.",
+      "<br>",
+    ]);
     revertNameChanges();
     //keyCounter = 0;
-    return
+    return;
   }
 
   if (TEAM_INPUT.value) {
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!INPUT_HIDDEN || !TEAM) return;
 
-    if (!INPUT_HIDDEN || !TEAM) return
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    TEAM.style.display = "none";
+    isTeamInput = false;
 
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
 
-      USERINPUT.disabled = false;
-      INPUT_HIDDEN.style.display = "block";
-      TEAM.style.display = "none";
-      isTeamInput = false;
-
-        setTimeout(() => {
-          USERINPUT.focus();
-        }, 200)
-
-
-      fetch('https://api.chakravyuh.live/teams', {
-        method: 'POST',
-        credentials: 'include',
-         headers: {
-          'Content-Type': 'application/json', 
-          // 'Cookie': cookie
-          },
-        body: JSON.stringify({
-          name: TEAM_INPUT.value,
-          
-        })
-      })
-      .then(async response => {
+    fetch("https://api.chakravyuh.live/teams", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Cookie': cookie
+      },
+      body: JSON.stringify({
+        name: TEAM_INPUT.value,
+      }),
+    })
+      .then(async (response) => {
         const data = await response.json();
-        
+
         if (!response.ok) {
           // If response is not ok, throw the error data
           throw data;
         }
-        
-        console.log('Success:', data);
-        writeLines(["<br>", "Team Created, others can now join this team by using join-team", "Try <span class='command'>'team'</span>", "<br>"]);
+
+        console.log("Success:", data);
+        writeLines([
+          "<br>",
+          "Team Created, others can now join this team by using join-team",
+          "Try <span class='command'>'team'</span>",
+          "<br>",
+        ]);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         // Display the error message from the API
         writeLines([
           "<br>",
-          `Error: ${error.message || 'Something went wrong'}`,
-          "<br>"
+          `Error: ${error.message || "Something went wrong"}`,
+          "<br>",
         ]);
       });
-    
 
-
-
-    return
+    return;
   } else {
     NAME_INPUT.value = "";
     nameCounter++;
   }
 }
 
-
 function tokenHandler() {
-
   console.log("Name handler is called");
   if (nameCounter === 2) {
-    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return
-    writeLines(["<br>", "INCORRECT PASSWORD.", "PERMISSION NOT GRANTED.", "<br>"])
+    if (!INPUT_HIDDEN || !mutWriteLines || !KEY) return;
+    writeLines([
+      "<br>",
+      "INCORRECT PASSWORD.",
+      "PERMISSION NOT GRANTED.",
+      "<br>",
+    ]);
     revertNameChanges();
     //keyCounter = 0;
-    return
+    return;
   }
 
   if (TOKEN_INPUT.value) {
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!INPUT_HIDDEN || !TOKEN) return;
 
-    if (!INPUT_HIDDEN || !TOKEN) return
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    TOKEN.style.display = "none";
+    isTokenInput = false;
 
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
 
-      USERINPUT.disabled = false;
-      INPUT_HIDDEN.style.display = "block";
-      TOKEN.style.display = "none";
-      isTokenInput = false;
+    let token =
+      "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
 
-        setTimeout(() => {
-          USERINPUT.focus();
-        }, 200)
+    fetch(token, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      //   body: JSON.stringify({
+      //   name: TEAM_INPUT.value,
 
-        let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
-
-
-      fetch(token, {
-        method: 'POST',
-        credentials: 'include',
-         headers: {
-          'Content-Type': 'application/json'
-          },
-        //   body: JSON.stringify({
-        //   name: TEAM_INPUT.value,
-          
-        // })
-      })
-      .then(async response => {
+      // })
+    })
+      .then(async (response) => {
         const data = await response.json();
-        
+
         if (!response.ok) {
           // If response is not ok, throw the error data
           throw data;
         }
-        
-        console.log('Success:', data);
-        writeLines(["<br>", "Verified!!", "Try <span class='command'>'challenge '</span>", "<br>"]);
+
+        console.log("Success:", data);
+        writeLines([
+          "<br>",
+          "Verified!!",
+          "Try <span class='command'>'challenge '</span>",
+          "<br>",
+        ]);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
         // Display the error message from the API
         writeLines([
           "<br>",
-          `Error: ${error.message || 'Something went wrong'}`,
-          "<br>"
+          `Error: ${error.message || "Something went wrong"}`,
+          "<br>",
         ]);
       });
 
-    
-
-
-
-    return
+    return;
   } else {
     NAME_INPUT.value = "";
     nameCounter++;
@@ -1652,64 +1618,61 @@ function tokenHandler() {
 }
 
 function tidHandler() {
-
   console.log("TID handler is called");
-  
+
   if (TID_INPUT.value) {
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!INPUT_HIDDEN || !TID) return;
 
-    if (!INPUT_HIDDEN || !TID) return
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    TID.style.display = "none";
+    isTidInput = false;
 
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
 
-      USERINPUT.disabled = false;
-      INPUT_HIDDEN.style.display = "block";
-      TID.style.display = "none";
-      isTidInput = false;
+    //let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
 
-        setTimeout(() => {
-          USERINPUT.focus();
-        }, 200)
+    fetch("https://api.chakravyuh.live/teams/join", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: TID_INPUT.value,
+      }),
+    })
+      .then(async (response) => {
+        const data = await response.json();
 
-        //let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
+        if (!response.ok) {
+          // If response is not ok, throw the error data
+          throw data;
+        }
 
+        console.log("Success:", data);
+        writeLines([
+          "<br>",
+          "Team Joined",
+          "Try <span class='command'>'team'</span>",
+          "<br>",
+        ]);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Display the error message from the API
+        writeLines([
+          "<br>",
+          `Error: ${error.message || "Something went wrong"}`,
+          "<br>",
+        ]);
+      });
 
-        fetch("https://api.chakravyuh.live/teams/join", {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            code: TID_INPUT.value,
-          })
-        })
-        .then(async response => {
-          const data = await response.json();
-          
-          if (!response.ok) {
-            // If response is not ok, throw the error data
-            throw data;
-          }
-          
-          console.log('Success:', data);
-          writeLines(["<br>", "Team Joined", "Try <span class='command'>'team'</span>", "<br>"]);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          // Display the error message from the API
-          writeLines([
-            "<br>",
-            `Error: ${error.message || 'Something went wrong'}`,
-            "<br>"
-          ]);
-        });
-
-    
-
-
-
-    return
+    return;
   } else {
     NAME_INPUT.value = "";
     nameCounter++;
@@ -1717,56 +1680,48 @@ function tidHandler() {
 }
 
 function challengeidHandler() {
-
   console.log("challenge id handler is called");
-  
+
   if (CHALLENGEID_INPUT.value) {
+    if (!mutWriteLines || !mutWriteLines.parentNode) return;
 
-    if (!mutWriteLines || !mutWriteLines.parentNode) return
+    if (!INPUT_HIDDEN || !CHALLENGEID) return;
 
-    if (!INPUT_HIDDEN || !CHALLENGEID) return
+    USERINPUT.disabled = false;
+    INPUT_HIDDEN.style.display = "block";
+    CHALLENGEID.style.display = "none";
+    isChallengeidInput = false;
 
+    setTimeout(() => {
+      USERINPUT.focus();
+    }, 200);
 
-      USERINPUT.disabled = false;
-      INPUT_HIDDEN.style.display = "block";
-      CHALLENGEID.style.display = "none";
-      isChallengeidInput = false;
+    if (!KEY) return;
+    isKeyInput = true;
+    USERINPUT.disabled = true;
 
+    if (INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
+    KEY.style.display = "block";
+    setTimeout(() => {
+      KEY_INPUT.focus();
+    }, 100);
 
-        setTimeout(() => {
-          USERINPUT.focus();
-        }, 200)
-
-        if(!KEY) return
-        isKeyInput = true;
-        USERINPUT.disabled = true;
-  
-        if(INPUT_HIDDEN) INPUT_HIDDEN.style.display = "none";
-        KEY.style.display = "block";
-        setTimeout(() => {
-          KEY_INPUT.focus();
-        }, 100);
-
-    
-
-
-
-    return
+    return;
   } else {
     NAME_INPUT.value = "";
     nameCounter++;
   }
 }
 
-function easterEggStyles() {   
+function easterEggStyles() {
   const bars = document.getElementById("bars");
   const body = document.body;
   const main = document.getElementById("main");
   const span = document.getElementsByTagName("span");
 
-  if (!bars) return
+  if (!bars) return;
   bars.innerHTML = "";
-  bars.remove()
+  bars.remove();
 
   if (main) main.style.border = "none";
 
@@ -1784,51 +1739,50 @@ function easterEggStyles() {
   USERINPUT.style.fontFamily = "VT323, monospace";
   USERINPUT.style.fontSize = "20px";
   if (PROMPT) PROMPT.style.color = "white";
-
 }
 
 const initEventListeners = () => {
-  if(HOST) {
+  if (HOST) {
     HOST.innerText = command.hostname;
   }
 
-  if(USER) {
+  if (USER) {
     USER.innerText = command.username;
   }
 
-  if(PRE_HOST) {
+  if (PRE_HOST) {
     PRE_HOST.innerText = command.hostname;
   }
 
-  if(PRE_USER) {
+  if (PRE_USER) {
     PRE_USER.innerText = command.username;
-  } 
+  }
 
   // Check if document is already loaded
-  if (document.readyState === 'complete') {
+  if (document.readyState === "complete") {
     // Document already loaded, execute banner immediately
     writeLines(BANNER);
   } else {
     // Document not loaded yet, add event listener
-    window.addEventListener('load', () => {
-      writeLines(BANNER);  
+    window.addEventListener("load", () => {
+      writeLines(BANNER);
     });
   }
-  
-  USERINPUT.addEventListener('keypress', userInputHandler);
-  USERINPUT.addEventListener('keydown', userInputHandler);
-  PASSWORD_INPUT.addEventListener('keypress', userInputHandler);
-  EMAIL_INPUT.addEventListener('keypress', userInputHandler);
-  NAME_INPUT.addEventListener('keypress', userInputHandler);
-  TEAM_INPUT.addEventListener('keypress', userInputHandler);
-  TOKEN_INPUT.addEventListener('keypress', userInputHandler);
-  TID_INPUT.addEventListener('keypress', userInputHandler);
-  KEY_INPUT.addEventListener('keypress', userInputHandler);
-  CHALLENGEID_INPUT.addEventListener('keypress', userInputHandler);
 
-  window.addEventListener('click', () => {
+  USERINPUT.addEventListener("keypress", userInputHandler);
+  USERINPUT.addEventListener("keydown", userInputHandler);
+  PASSWORD_INPUT.addEventListener("keypress", userInputHandler);
+  EMAIL_INPUT.addEventListener("keypress", userInputHandler);
+  NAME_INPUT.addEventListener("keypress", userInputHandler);
+  TEAM_INPUT.addEventListener("keypress", userInputHandler);
+  TOKEN_INPUT.addEventListener("keypress", userInputHandler);
+  TID_INPUT.addEventListener("keypress", userInputHandler);
+  KEY_INPUT.addEventListener("keypress", userInputHandler);
+  CHALLENGEID_INPUT.addEventListener("keypress", userInputHandler);
+
+  window.addEventListener("click", () => {
     USERINPUT.focus();
   });
-}
+};
 
 initEventListeners();
