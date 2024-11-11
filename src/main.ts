@@ -377,8 +377,8 @@ async function commandHandler(input: string) {
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
           "<br>",
-          `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">`,
-          `${
+          `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;
+          ">${
             challengeData.hints.length > 0
               ? `Hints: ${challengeData.hints
                   .map(
@@ -386,8 +386,7 @@ async function commandHandler(input: string) {
                   )
                   .join("; ")}`
               : ""
-          }`,
-          `</div>`,
+          }</div>`,
         ]);
       } catch (error: unknown) {
         console.error("Error:", error);
