@@ -388,7 +388,7 @@ async function commandHandler(input : string) {
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
           "<br>",
-          `Hints : ${challengeData.hints.join(', ')}`,
+          `${challengeData.hints.length > 0 ? `Hints: ${challengeData.hints.map((hint, index) => `${index + 1}. ${hint.text}`).join('; ')}` : ''}`,
         ]);
       }catch (error: unknown) {
         console.error('Error:', error);
