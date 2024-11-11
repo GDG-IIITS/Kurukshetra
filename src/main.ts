@@ -1,13 +1,13 @@
 import command from "../config.json" assert { type: "json" };
-import { HELP } from "./commands/help";
-import { BANNER } from "./commands/banner";
 import { ABOUT } from "./commands/about";
+import { BANNER } from "./commands/banner";
 import { DEFAULT } from "./commands/default";
+import { HELP } from "./commands/help";
 import { PROJECTS } from "./commands/projects";
 //import { createWhoami } from "./commands/whoami";
+import { ACHIEVEMENTS } from "./commands/achievements";
 import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
-import { ACHIEVEMENTS } from "./commands/achievements";
 
 import { RULE } from "./KurukshetraCommands/rules";
 
@@ -377,6 +377,7 @@ async function commandHandler(input: string) {
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
           "<br>",
+          `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">`,
           `${
             challengeData.hints.length > 0
               ? `Hints: ${challengeData.hints
@@ -386,6 +387,7 @@ async function commandHandler(input: string) {
                   .join("; ")}`
               : ""
           }`,
+          `</div>`,
         ]);
       } catch (error: unknown) {
         console.error("Error:", error);
