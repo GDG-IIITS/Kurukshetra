@@ -669,8 +669,20 @@ async function commandHandler(input: string) {
               `${response.status}: ${errorBody.message || "Unknown error"}`
             );
           }
+
+          
       
           const teamData = await response.json();
+
+          const outputLines = [
+            `Team name: ${teamData.name}`,
+            `Team score: ${teamData.score}`,
+            `Team UG: ${teamData.ug}`,
+            `Team join code: ${teamData.joinCode}`,
+            `Team lead name: ${teamData.lead.fullName}`,
+            "",  // Empty line before members list
+            "Team members:"
+          ];
       
           writeLines([
             `Team name: ${teamData.name}`,
@@ -684,10 +696,14 @@ async function commandHandler(input: string) {
       
           // Add team members
           teamData.members.forEach((member: TeamMember) => {
-            writeLines([`- ${member.fullName}`]);
+            outputLines.push(`- ${member.fullName}`);
           });
       
-          writeLines(["<br>"]);
+          // Add final line break
+          outputLines.push("<br>");
+      
+          // Write all lines at once
+          writeLines(outputLines);
       
         }  catch (error: unknown) {
         console.error("Error:", error);
