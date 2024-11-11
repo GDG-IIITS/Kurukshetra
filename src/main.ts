@@ -621,7 +621,7 @@ async function commandHandler(input: string) {
             `${response.status}: ${errorBody.message || "Unknown error"}`
           );
         } else {
-          writeLines(["Mail sent !!", "<br>"]);
+          writeLines(["Mail sent !! now use the verify command", "<br>"]);
         }
       } catch (error: unknown) {
         console.error("Error:", error);
@@ -643,54 +643,53 @@ async function commandHandler(input: string) {
       }
       break;
 
-    case "team":
-      if (bareMode) {
-        writeLines([`${command.username}`, "<br>"]);
-        break;
+      interface TeamMember {
+        _id: string;
+        fullName: string;
       }
 
-      try {
-        const response = await fetch("https://api.chakravyuh.live/teams/my", {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            //accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          const errorBody = await response.json();
-          throw new Error(
-            `${response.status}: ${errorBody.message || "Unknown error"}`
-          );
+      case "team":
+        if (bareMode) {
+          writeLines([`${command.username}`, "<br>"]);
+          break;
         }
-
-        const teamData = await response.json();
-
-        writeLines([
-          `Team name: ${teamData.name}`,
-          `Team score: ${teamData.score}`,
-          `Team UG: ${teamData.ug}`,
-          `Team join code: ${teamData.joinCode}`,
-          `Team lead name: ${teamData.lead.fullName}`,
-
-          "<br>",
-        ]);
-        // teamData.forEach((team: any, index: number) => {
-        //   allLines.push(
-        //     `<div style="margin-left: 10px; margin-bottom: 10px;">`,
-        //     `#${index + 1}. Team ${team.name}`,
-        //     "<br>",
-        //     `<div style="margin-left: 20px;">`,
-        //     `Score: ${team.score}`,
-        //     "<br>",
-        //     `Captain: ${team.lead?.fullName || 'Unknown'}`,
-        //     "<br>",
-        //     `</div>`,
-        //     `</div>`
-        //   );
-      } catch (error: unknown) {
+      
+        try {
+          const response = await fetch("https://api.chakravyuh.live/teams/my", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+      
+          if (!response.ok) {
+            const errorBody = await response.json();
+            throw new Error(
+              `${response.status}: ${errorBody.message || "Unknown error"}`
+            );
+          }
+      
+          const teamData = await response.json();
+      
+          writeLines([
+            `Team name: ${teamData.name}`,
+            `Team score: ${teamData.score}`,
+            `Team UG: ${teamData.ug}`,
+            `Team join code: ${teamData.joinCode}`,
+            `Team lead name: ${teamData.lead.fullName}`,
+            "",  // Empty line before members list
+            "Team members:",
+          ]);
+      
+          // Add team members
+          teamData.members.forEach((member: TeamMember) => {
+            writeLines([`- ${member.fullName}`]);
+          });
+      
+          writeLines(["<br>"]);
+      
+        }  catch (error: unknown) {
         console.error("Error:", error);
 
         if (error && typeof error === "object" && "message" in error) {
@@ -1231,8 +1230,8 @@ function passwordHandler() {
           console.log("Success:", data);
           writeLines([
             "<br>",
-            "Registered, now use the verify command",
-            "Try <span class='command'>'verify'</span>",
+            "Registered, now use the send-mail command o get verification mail",
+            "Try <span class='command'>'send-mail'</span> Then, <span class='command'>'verify'</span> ",
             "<br>",
           ]);
         })
