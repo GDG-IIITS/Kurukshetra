@@ -353,6 +353,8 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              accept: "application/json",
+              
             },
           }
         );
@@ -422,6 +424,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              accept: "application/json",
             },
           }
         );
@@ -490,6 +493,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              accept: "application/json",
             },
           }
         );
@@ -561,6 +565,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            accept: "application/json",
           },
         });
 
@@ -604,6 +609,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              accept: "application/json",
             },
             body: JSON.stringify({}),
           }
@@ -649,6 +655,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            accept: "application/json",
           },
         });
 
@@ -715,6 +722,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
+            accept: "application/json",
           },
         });
 
@@ -960,6 +968,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              accept: "application/json",
             },
           }
         );
@@ -1159,6 +1168,7 @@ function passwordHandler() {
         //credentials: 'include',
         headers: {
           "Content-Type": "application/json",
+          accept: "application/json",
           //'Accept': 'application/json'
         },
         body: JSON.stringify({
@@ -1200,6 +1210,7 @@ function passwordHandler() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          accept: "application/json",
         },
         body: JSON.stringify({
           email: EMAIL_INPUT.value,
@@ -1378,6 +1389,7 @@ function keyHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        accept: "application/json",
         // 'Cookie': cookie
       },
       body: JSON.stringify({
@@ -1503,6 +1515,7 @@ function teamHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        accept: "application/json",
         // 'Cookie': cookie
       },
       body: JSON.stringify({
@@ -1579,6 +1592,7 @@ function tokenHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        accept: "application/json",
       },
       //   body: JSON.stringify({
       //   name: TEAM_INPUT.value,
@@ -1642,6 +1656,7 @@ function tidHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        accept: "application/json",
       },
       body: JSON.stringify({
         code: TID_INPUT.value,
