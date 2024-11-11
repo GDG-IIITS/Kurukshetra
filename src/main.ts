@@ -353,7 +353,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              accept: "application/json",
+              //accept: "application/json",
               
             },
           }
@@ -424,7 +424,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              accept: "application/json",
+              //accept: "application/json",
             },
           }
         );
@@ -493,7 +493,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              accept: "application/json",
+              //accept: "application/json",
             },
           }
         );
@@ -565,7 +565,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            accept: "application/json",
+            //accept: "application/json",
           },
         });
 
@@ -609,7 +609,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              accept: "application/json",
+              //accept: "application/json",
             },
             body: JSON.stringify({}),
           }
@@ -655,7 +655,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            accept: "application/json",
+            //accept: "application/json",
           },
         });
 
@@ -722,7 +722,7 @@ async function commandHandler(input: string) {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            accept: "application/json",
+            //accept: "application/json",
           },
         });
 
@@ -968,7 +968,7 @@ async function commandHandler(input: string) {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              accept: "application/json",
+              //accept: "application/json",
             },
           }
         );
@@ -1389,7 +1389,7 @@ function keyHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        accept: "application/json",
+        //accept: "application/json",
         // 'Cookie': cookie
       },
       body: JSON.stringify({
@@ -1515,7 +1515,7 @@ function teamHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        accept: "application/json",
+        //accept: "application/json",
         // 'Cookie': cookie
       },
       body: JSON.stringify({
@@ -1592,7 +1592,7 @@ function tokenHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        accept: "application/json",
+        //accept: "application/json",
       },
       //   body: JSON.stringify({
       //   name: TEAM_INPUT.value,
@@ -1642,7 +1642,7 @@ function tidHandler() {
 
     USERINPUT.disabled = false;
     INPUT_HIDDEN.style.display = "block";
-    TID.style.display = "none";
+    TID.style.display = "none";  
     isTidInput = false;
 
     setTimeout(() => {
@@ -1656,7 +1656,7 @@ function tidHandler() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        accept: "application/json",
+        //accept: "application/json",
       },
       body: JSON.stringify({
         code: TID_INPUT.value,
