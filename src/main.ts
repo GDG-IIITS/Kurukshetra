@@ -649,82 +649,70 @@ async function commandHandler(input: string) {
       }
 
       case "team":
-        if (bareMode) {
-          writeLines([`${command.username}`, "<br>"]);
-          break;
-        }
-      
-        try {
-          const response = await fetch("https://api.chakravyuh.live/teams/my", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-      
-          if (!response.ok) {
-            const errorBody = await response.json();
-            throw new Error(
-              `${response.status}: ${errorBody.message || "Unknown error"}`
-            );
-          }
+  if (bareMode) {
+    writeLines([`${command.username}`, "<br>"]);
+    break;
+  }
 
-          
-      
-          const teamData = await response.json();
+  try {
+    const response = await fetch("https://api.chakravyuh.live/teams/my", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-          const outputLines = [
-            `Team name: ${teamData.name}`,
-            `Team score: ${teamData.score}`,
-            `Team UG: ${teamData.ug}`,
-            `Team join code: ${teamData.joinCode}`,
-            `Team lead name: ${teamData.lead.fullName}`,
-            "",  // Empty line before members list
-            "Team members:"
-          ];
-      
-          writeLines([
-            `Team name: ${teamData.name}`,
-            `Team score: ${teamData.score}`,
-            `Team UG: ${teamData.ug}`,
-            `Team join code: ${teamData.joinCode}`,
-            `Team lead name: ${teamData.lead.fullName}`,
-            "",  // Empty line before members list
-            "Team members:",
-          ]);
-      
-          // Add team members
-          teamData.members.forEach((member: TeamMember) => {
-            outputLines.push(`- ${member.fullName}`);
-          });
-      
-          // Add final line break
-          outputLines.push("<br>");
-      
-          // Write all lines at once
-          writeLines(outputLines);
-      
-        }  catch (error: unknown) {
-        console.error("Error:", error);
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw new Error(
+        `${response.status}: ${errorBody.message || "Unknown error"}`
+      );
+    }
 
-        if (error && typeof error === "object" && "message" in error) {
-          const apiError = error as {
-            message: string;
-            error?: string;
-            statusCode?: number;
-          };
-          writeLines([
-            `Error ${apiError.statusCode || ""}: ${apiError.message}`,
-            apiError.error ? `(${apiError.error})` : "",
-            "<br>",
-          ]);
-        } else {
-          writeLines(["An unexpected error occurred", "<br>"]);
-        }
-      }
-      break;
+    const teamData = await response.json();
 
+    // Create array for all output lines
+    const outputLines = [
+      `Team name: ${teamData.name}`,
+      `Team score: ${teamData.score}`,
+      `Team UG: ${teamData.ug}`,
+      `Team join code: ${teamData.joinCode}`,
+      `Team lead name: ${teamData.lead.fullName}`,
+      "",  // Empty line before members list
+      "Team members:"
+    ];
+
+    // Add team members
+    teamData.members.forEach((member: TeamMember) => {
+      outputLines.push(`- ${member.fullName}`);
+    });
+
+    // Add final line break
+    outputLines.push("<br>");
+
+    // Write all lines at once
+    writeLines(outputLines);
+
+  } catch (error: unknown) {
+    console.error("Error:", error);
+
+    if (error && typeof error === "object" && "message" in error) {
+      const apiError = error as {
+        message: string;
+        error?: string;
+        statusCode?: number;
+      };
+      writeLines([
+        `Error ${apiError.statusCode || ""}: ${apiError.message}`,
+        apiError.error ? `(${apiError.error})` : "",
+        "<br>",
+      ]);
+    } else {
+      writeLines(["An unexpected error occurred", "<br>"]);
+    }
+  }
+  break;
     case "me":
       if (bareMode) {
         writeLines([`${command.username}`, "<br>"]);
