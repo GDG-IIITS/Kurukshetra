@@ -1164,6 +1164,7 @@ function passwordHandler() {
 
       fetch("https://api.chakravyuh.live/auth/login", {
         method: "POST",
+        credentials: 'include',
 
         //credentials: 'include',
         headers: {
@@ -1208,6 +1209,7 @@ function passwordHandler() {
 
       fetch("https://api.chakravyuh.live/auth/register", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
           accept: "application/json",
