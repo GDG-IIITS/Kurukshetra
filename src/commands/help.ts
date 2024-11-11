@@ -4,11 +4,11 @@ const helpObj = {
   "commands": [
     [
     "'register'",
-    "if new",
+    "If new",
     ],
     [
       "'login'",
-      "if already registered"
+      "If already registered"
     ],
     [
       "'logout'",
@@ -16,7 +16,7 @@ const helpObj = {
     ],
     [
       "'verify'",
-      "use the token sent in mail to verify"
+      "Use the token sent in mail to verify"
     ],
     [
 
@@ -33,11 +33,11 @@ const helpObj = {
     ],
     [
       "'create-team'",
-      "create a new team"
+      "Create a new team"
     ],
     [
       "'join-team'",
-      "join an existing team"
+      "Join an existing team"
     ],
     [
 
@@ -50,7 +50,7 @@ const helpObj = {
     ],
     [
       "'rules'",
-      "Sigme peopl play by the rules"
+      "Sigma people play by the rules"
     ],
     [
       "'challenge'",
@@ -75,13 +75,13 @@ const helpObj = {
     ],
     [
       "'send-mail'",
-      "resend verification mail"
+      "Resend verification mail"
     ],
     
 
     [
       "'me'",
-      "see you details"
+      "See you details"
     ]
   ],
 }

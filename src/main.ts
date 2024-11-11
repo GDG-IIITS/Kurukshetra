@@ -378,6 +378,8 @@ async function commandHandler(input : string) {
         const challengeData = await response.json();
         
         writeLines([
+          `Challenge no. : ${challengeData.no}`,
+          "<br>",
           `Current Challenge: ${challengeData.title}`,
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Summary: ${challengeData.summary}</div>`,
@@ -386,7 +388,7 @@ async function commandHandler(input : string) {
           "<br>",
           `<div style="white-space: pre-wrap; word-wrap: break-word; max-width: 100%;">Description: ${challengeData.description}</div>`,
           "<br>",
-          `Challenge no. : ${challengeData.no}`,
+          `Hints : ${challengeData.hints.join(', ')}`,
         ]);
       }catch (error: unknown) {
         console.error('Error:', error);
