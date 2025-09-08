@@ -18,8 +18,8 @@ const createBanner = () : string[] => {
     banner.push(eleToPush);
   });  
   banner.push("<br>");
-  banner.push("This is your interface to navigate the Chakravyuh");
-  banner.push("Type <span class='command'>'help'</span> for a list of all available commands.");
+  banner.push("Welcome to NEXUS - Gateway to the Fractured Future");
+  banner.push("Type <span class='command'>'help'</span> for temporal commands or <span class='command'>'lore'</span> for the legend.");
   // banner.push(`Type <span class='command'>'repo'</span> to view the GitHub repository or click <a href='${command.repoLink}' target='_blank'>here</a>.`);
   banner.push("<br>");
   return banner;

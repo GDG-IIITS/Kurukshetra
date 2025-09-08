@@ -15,10 +15,13 @@ const createRules = () : string[] => {
   //let string = "";
 
   about.push("<br>");
-//   about.push("Hello I am Abhijit Patil 🖐️,");
-  about.push(command.rule5);
+  about.push("═══ NEXUS TREASURE HUNT RULES ═══");
+  about.push("<br>");
   about.push(command.rules);
   about.push(command.rules1);
+  about.push(command.rules2);
+  about.push(command.rules3);
+  about.push(command.rules4);
   
   
   

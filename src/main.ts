@@ -10,6 +10,10 @@ import { Hackme } from "./commands/hackme";
 import { Neko } from "./commands/neko";
 
 import { RULE } from "./KurukshetraCommands/rules";
+import { LORE } from "./KurukshetraCommands/lore";
+
+// Get base URL from environment variables or use localhost as fallback
+const BASE_URL = process.env.BASE_URL || 'http://localhost:7878';
 
 //mutWriteLines gets deleted and reassigned
 let mutWriteLines = document.getElementById("write-lines");
@@ -75,6 +79,7 @@ const COMMANDS = [
   "about",
   "help",
   "rules",
+  "lore",
   "verify",
 ];
 const HISTORY: string[] = [];
@@ -347,7 +352,7 @@ async function commandHandler(input: string) {
 
       try {
         const response = await fetch(
-          "https://api.chakravyuh.live/challenges/me/todo",
+          `${BASE_URL}/challenges/me/todo`,
           {
             method: "GET",
             credentials: "include",
@@ -418,7 +423,7 @@ async function commandHandler(input: string) {
 
       try {
         const response = await fetch(
-          "https://api.chakravyuh.live/challenges/me/done",
+          `${BASE_URL}/challenges/me/done`,
           {
             method: "GET",
             credentials: "include",
@@ -487,7 +492,7 @@ async function commandHandler(input: string) {
 
       try {
         const response = await fetch(
-          "https://api.chakravyuh.live/teams/leaderboard",
+          `${BASE_URL}/teams/leaderboard`,
           {
             method: "GET",
             credentials: "include",
@@ -560,7 +565,7 @@ async function commandHandler(input: string) {
       }
 
       try {
-        const response = await fetch("https://api.chakravyuh.live/", {
+        const response = await fetch(`${BASE_URL}/`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -603,7 +608,7 @@ async function commandHandler(input: string) {
 
       try {
         const response = await fetch(
-          "https://api.chakravyuh.live/auth/verify-email/init",
+          `${BASE_URL}/auth/verify-email/init`,
           {
             method: "POST",
             credentials: "include",
@@ -655,7 +660,7 @@ async function commandHandler(input: string) {
   }
 
   try {
-    const response = await fetch("https://api.chakravyuh.live/teams/my", {
+    const response = await fetch(`${BASE_URL}/teams/my`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -720,7 +725,7 @@ async function commandHandler(input: string) {
       }
 
       try {
-        const response = await fetch("https://api.chakravyuh.live/auth/me", {
+        const response = await fetch(`${BASE_URL}/auth/me`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -780,6 +785,13 @@ async function commandHandler(input: string) {
         break;
       }
       writeLines(RULE);
+      break;
+    case "lore":
+      if (bareMode) {
+        writeLines(["The ancient scrolls are hidden from view.", "<br>"]);
+        break;
+      }
+      writeLines(LORE);
       break;
 
     case "projects":
@@ -965,7 +977,7 @@ async function commandHandler(input: string) {
     case "logout":
       try {
         const response = await fetch(
-          "https://api.chakravyuh.live/auth/logout",
+          `${BASE_URL}/auth/logout`,
           {
             method: "DELETE",
             credentials: "include",
@@ -1165,7 +1177,7 @@ function passwordHandler() {
       console.log(EMAIL_INPUT.value);
       console.log(PASSWORD_INPUT.value);
 
-      fetch("https://api.chakravyuh.live/auth/login", {
+      fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         credentials: 'include',
 
@@ -1210,7 +1222,7 @@ function passwordHandler() {
       console.log(PASSWORD_INPUT.value);
       console.log(NAME_INPUT.value);
 
-      fetch("https://api.chakravyuh.live/auth/register", {
+      fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -1249,7 +1261,7 @@ function passwordHandler() {
           ]);
         });
 
-      // fetch('https://api.chakravyuh.live/auth/verify-email/init', {
+      // fetch(`${BASE_URL}/auth/verify-email/init`, {
       //   method: 'POST',
       //   headers: {
       //       'Content-Type': 'application/json'
@@ -1389,7 +1401,7 @@ function keyHandler() {
       USERINPUT.focus();
     }, 200);
 
-    fetch("https://api.chakravyuh.live/challenges/submit", {
+    fetch(`${BASE_URL}/challenges/submit`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -1515,7 +1527,7 @@ function teamHandler() {
       USERINPUT.focus();
     }, 200);
 
-    fetch("https://api.chakravyuh.live/teams", {
+    fetch(`${BASE_URL}/teams`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -1590,7 +1602,7 @@ function tokenHandler() {
     }, 200);
 
     let token =
-      "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
+      `${BASE_URL}/auth/verify-email/${TOKEN_INPUT.value}`;
 
     fetch(token, {
       method: "POST",
@@ -1654,9 +1666,9 @@ function tidHandler() {
       USERINPUT.focus();
     }, 200);
 
-    //let token = "https://api.chakravyuh.live/auth/verify-email/" + TOKEN_INPUT.value;
+    //let token = `${BASE_URL}/auth/verify-email/${TOKEN_INPUT.value}`;
 
-    fetch("https://api.chakravyuh.live/teams/join", {
+    fetch(`${BASE_URL}/teams/join`, {
       method: "POST",
       credentials: "include",
       headers: {

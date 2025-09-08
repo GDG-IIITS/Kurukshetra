@@ -46,27 +46,31 @@ const helpObj = {
     ],
     [
       "",
-      "---[Kurukshetra]--"
+      "---[NEXUS]--"
     ],
     [
       "'rules'",
-      "Sigma people play by the rules"
+      "Temporal laws that bind the Fragment Seekers"
+    ],
+    [
+      "'lore'",
+      "Unravel the legend of the Fractured Future"
     ],
     [
       "'challenge'",
-      "Show your mental muscle"
+      "Face the Guardians and prove your worth"
     ],
     [
       "'submit'",
-      "Think you got the key?"
+      "Unlock the temporal node with your findings"
     ],
     [
-      "'leaderbord'",
-      "See your ranking"
+      "'leaderboard'",
+      "Behold the ranks of Temporal Champions"
     ],
     [
       "'records'",
-      "See your completed challenges"
+      "Review your journey through the temporal nodes"
     ],
     [
 

@@ -3,12 +3,12 @@
 :root {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 200;
-  --bg: #390000;
-  --border: #35b833;
-  --text: #00ff1e;
-  --prompt-default: #4cffff;
-  --prompt-1: #0015ff;
-  --prompt-2: #ff0000;
+  --bg: #000000;
+  --border: #465C88;
+  --text: #FF7A30;
+  --prompt-default: #FF7A30;
+  --prompt-1: #465C88;
+  --prompt-2: #E9E3DF;
 }
 
 @keyframes typing {
@@ -76,7 +76,7 @@ pre {
   margin: 0;
   padding: 0;
   line-height: 20px !important;
-  color: #FF9951;
+  color: #FF7A30;
   font-family: "ascii", monospace;
 }
 
@@ -88,13 +88,13 @@ input {
   resize: none;
   outline: none;
   font-size: 16px;
-  color: #FF7685;
+  color: #E9E3DF;
   caret-color: var(--prompt-default);
   width: 50%;
 }
 
 a {
-  color: #B6AAEE;
+  color: #FF7A30;
 }
 
 a:hover {
@@ -159,29 +159,29 @@ a:hover {
   text-shadow:
     0 0 7px #fff,
     0 0 151px var(--border);
-  color: #FD9BDB;
+  color: #FF7A30;
 }
 .domainname{
   text-shadow:
     0 0 10px #fff,
     0 0 200px var(--border);
-  color: #2eb322;
+  color: #E9E3DF;
 }
 .projectname {
   text-shadow:
     0 0 7px #fff,
     0 0 151px var(--border);
-  color: #03fc0f;
+  color: #FF7A30;
 }.name {
   text-shadow:
     0 0 7px #fff,
     0 0 151px var(--border);
-  color: #03fc0f;
+  color: #FF7A30;
 }.by {
   text-shadow:
     0 0 7px #fff,
     0 0 151px var(--border);
-  color: #fcf803;
+  color: #E9E3DF;
 }
 
 .output {
@@ -189,7 +189,7 @@ a:hover {
 }
 
 .keys {
-  color: #FF9951;
+  color: #FF7A30;
   font-weight: 400;
 }
 

@@ -79,7 +79,7 @@ This platform has been successfully used for:
 3. **Configure environment variables**
    Create a `.env` file in the root directory:
    ```env
-   BASE_URL=https://api.chakravyuh.live
+   BASE_URL=http://localhost:7878
    NODE_ENV=production
    API_KEY=your_api_key_here
    ```
